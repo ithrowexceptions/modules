@@ -1,5 +1,7 @@
 package it.euris.group1.modules.entities;
 
+import it.euris.group1.modules.more.Type;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -27,24 +29,29 @@ public class Module {
     @Column(nullable = false)
     private Integer age;
 
+    private Type type;
+
     public Module() {
     }
 
-    public Module(Long id, String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age) {
+
+    public Module(Long id, String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age, Type type) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
         this.creationTimestamp = creationTimestamp;
         this.age = age;
+        this.type = type;
     }
 
-    public Module(String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age) {
+    public Module(String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age, Type type) {
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
         this.creationTimestamp = creationTimestamp;
         this.age = age;
+        this.type = type;
     }
 
     public Long getId() {
@@ -94,4 +101,14 @@ public class Module {
     public void setAge(Integer age) {
         this.age = age;
     }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+
 }
