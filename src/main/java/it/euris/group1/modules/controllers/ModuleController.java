@@ -1,5 +1,6 @@
 package it.euris.group1.modules.controllers;
 
+import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.repositories.ModulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
