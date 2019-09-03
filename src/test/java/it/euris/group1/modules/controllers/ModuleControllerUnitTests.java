@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = ModuleController.class)
-public class ModuleControllerTests {
+public class ModuleControllerUnitTests {
     private List<Module> mockModules;
     private static final String BASE_URL = "/modules";
 
