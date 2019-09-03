@@ -63,7 +63,7 @@ public class ModuleControllerTests {
 //                .andExpect(jsonPath("$.name", is("Jason")))
 //                .andExpect(jsonPath("$.surname", is("Smith")))
 //                .andExpect(jsonPath("$.birthDate", is("2000-01-01")))
-//                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T10:23:12.123+0000")))
+//                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T11:00:00.000+0000")))
 //                .andExpect(jsonPath("$.age", is(19)))
 //                .andExpect(jsonPath("$.type", is("OWNER")))
                 .andReturn();
@@ -71,14 +71,9 @@ public class ModuleControllerTests {
         String jsonResult = result.getResponse().getContentAsString();
         System.out.println(jsonResult);
 
-//        JSONAssert.assertEquals("{id:1,name:\"Jason\",surname:\"Smith\"}",
-//                jsonResult,
-//                JSONCompareMode.LENIENT);
-
-        JSONAssert.assertEquals("{id:1}", jsonResult, JSONCompareMode.LENIENT);
-        JSONAssert.assertEquals("{name:\"Jason\"}", jsonResult, JSONCompareMode.LENIENT);
-        JSONAssert.assertEquals("{surname:\"Smith\"}", jsonResult, JSONCompareMode.LENIENT);
-
+        JSONAssert.assertEquals("{id:1,name:\"Jason\"}",
+                jsonResult,
+                JSONCompareMode.LENIENT);
     }
 
     private List<Module> getMockModules() {
@@ -86,7 +81,7 @@ public class ModuleControllerTests {
                 "Jason",
                 "Smith",
                 LocalDate.of(2000, 01, 01),
-                Timestamp.valueOf("2015-01-01 11:23:12.123"),
+                Timestamp.valueOf("2015-01-01 12:00:00.000"),
                 19,
                 Type.OWNER));
     }
