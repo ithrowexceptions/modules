@@ -2,11 +2,19 @@ package it.euris.group1.modules.controllers;
 
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.repositories.ModulesRepository;
+import it.euris.group1.modules.services.ModuleService;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.HtmlExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +25,9 @@ import java.util.List;
 public class ModuleController {
     @Autowired
     private ModulesRepository modulesRepository;
+
+    @Autowired
+    private ModuleService moduleService;
 
     // ********** GET requests **********
     @GetMapping()
@@ -66,6 +77,19 @@ public class ModuleController {
     public List<Module> getModulesByType(@PathVariable("type") String moduleType) {
         // TODO
         return null;
+    }
+
+    @GetMapping("/report/{id}")
+    public void getReport(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
+        response.setContentType("text/html");
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(moduleService.report(id));
+        InputStream inputStream = this.getClass().getResourceAsStream("/reports/module-report.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+        HtmlExporter exporter = new HtmlExporter(DefaultJasperReportsContext.getInstance());
+        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exporter.setExporterOutput(new SimpleHtmlExporterOutput(response.getWriter()));
+        exporter.exportReport();
     }
 
     // ********** POST requests **********
