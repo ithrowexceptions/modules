@@ -41,39 +41,39 @@ public class ModuleController {
         return ResponseEntity.ok().body(module);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public List<Module> getModulesByName(@PathVariable("name") String moduleName) {
         // TODO
         return null;
     }
 
-    @GetMapping("/{surname}")
+    @GetMapping("/surname/{surname}")
     public List<Module> getModulesBySurname(@PathVariable("surname") String moduleSurname) {
         // TODO
         return null;
     }
 
-    @GetMapping("/{birthdate}")
+    @GetMapping("/birthdate/{birthdate}")
     public List<Module> getModulesByBirthdate(@PathVariable("birthdate") String moduleBirthdate) {
         LocalDate birthdate = LocalDate.parse(moduleBirthdate);
         // TODO
         return null;
     }
 
-    @GetMapping("/{creationTimestamp}")
+    @GetMapping("/timestamp/{creationTimestamp}")
     public List<Module> getModulesByTimestamp(@PathVariable("creationTimestamp") String moduleCreationTimestamp) {
         Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp);
         // TODO
         return null;
     }
 
-    @GetMapping("/{age}")
+    @GetMapping("/age/{age}")
     public List<Module> getModulesByAge(@PathVariable("creationTimestamp") Integer moduleAge) {
         // TODO
         return null;
     }
 
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public List<Module> getModulesByType(@PathVariable("type") String moduleType) {
         // TODO
         return null;
