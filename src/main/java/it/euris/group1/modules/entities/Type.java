@@ -1,4 +1,4 @@
-package it.euris.group1.modules.more;
+package it.euris.group1.modules.entities;
 
 public enum Type {
  CHILD,
