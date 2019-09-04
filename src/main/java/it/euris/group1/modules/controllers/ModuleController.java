@@ -26,8 +26,8 @@ public class ModuleController {
     @Autowired
     private ModulesRepository modulesRepository;
 
-    @Autowired
-    private ModuleService moduleService;
+//    @Autowired
+//    private ModuleService moduleService;
 
     // ********** GET requests **********
     @GetMapping()
@@ -75,21 +75,20 @@ public class ModuleController {
         return null;
     }
 
-    @GetMapping("/report/{id}")
-    public void getReport(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
-        response.setContentType("text/html");
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(moduleService.report(id));
-        InputStream inputStream = this.getClass().getResourceAsStream("/reports/module-report.jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-        HtmlExporter exporter = new HtmlExporter(DefaultJasperReportsContext.getInstance());
-        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleHtmlExporterOutput(response.getWriter()));
-        exporter.exportReport();
-    }
+//    @GetMapping("/report/{id}")
+//    public void getReport(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
+//        response.setContentType("text/html");
+//        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(moduleService.report(id));
+//        InputStream inputStream = this.getClass().getResourceAsStream("/reports/module-report.jrxml");
+//        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+//        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
+//        HtmlExporter exporter = new HtmlExporter(DefaultJasperReportsContext.getInstance());
+//        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+//        exporter.setExporterOutput(new SimpleHtmlExporterOutput(response.getWriter()));
+//        exporter.exportReport();
+//    }
 
     // ********** POST requests **********
-
     @PostMapping()
     public Module createModule(@Valid @RequestBody Module newModule) {
         return modulesRepository.save(newModule);

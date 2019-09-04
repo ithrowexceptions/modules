@@ -1,7 +1,5 @@
 package it.euris.group1.modules.entities;
 
-import it.euris.group1.modules.more.Type;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -9,7 +7,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "modules")
 public class Module {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,7 +30,6 @@ public class Module {
 
     public Module() {
     }
-
 
     public Module(Long id, String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age, Type type) {
         this.id = id;
@@ -109,6 +105,4 @@ public class Module {
     public void setType(Type type) {
         this.type = type;
     }
-
-
 }
