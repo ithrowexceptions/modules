@@ -43,21 +43,18 @@ public class ModuleController {
 
     @GetMapping("/name/{name}")
     public List<Module> getModulesByName(@PathVariable("name") String moduleName) {
-        // TODO
-        return null;
+        return modulesRepository.findByName(moduleName);
     }
 
     @GetMapping("/surname/{surname}")
     public List<Module> getModulesBySurname(@PathVariable("surname") String moduleSurname) {
-        // TODO
-        return null;
+        return modulesRepository.findBySurname(moduleSurname);
     }
 
     @GetMapping("/birthdate/{birthdate}")
     public List<Module> getModulesByBirthdate(@PathVariable("birthdate") String moduleBirthdate) {
         LocalDate birthdate = LocalDate.parse(moduleBirthdate);
-        // TODO
-        return null;
+        return modulesRepository.findByBirthDate(birthdate);
     }
 
     @GetMapping("/timestamp/{creationTimestamp}")
@@ -69,8 +66,7 @@ public class ModuleController {
 
     @GetMapping("/age/{age}")
     public List<Module> getModulesByAge(@PathVariable("creationTimestamp") Integer moduleAge) {
-        // TODO
-        return null;
+        return modulesRepository.findByAge(moduleAge);
     }
 
     @GetMapping("/type/{type}")
