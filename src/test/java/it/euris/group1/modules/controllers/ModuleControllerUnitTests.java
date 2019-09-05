@@ -1,6 +1,7 @@
 package it.euris.group1.modules.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import it.euris.group1.modules.ModulesApplication;
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("ciao")
+//@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ModulesApplication.class)
 @AutoConfigureMockMvc
@@ -69,30 +70,31 @@ public class ModuleControllerUnitTests {
 
     @Test
     public void whenModuledIsProvided_thenRetrievedNameIsCorrect() throws Exception {
-        Long id = 1L;
         var jasonOptionalModule = Optional.of(mockModules.get(0));
-        doReturn(jasonOptionalModule).when(mockModulesRepository).findById(id); // when(modulesRepository.findById(1L)).thenReturn(jason); non funziona
+        doReturn(jasonOptionalModule).when(mockModulesRepository).findById(1L);
+        // when(modulesRepository.findById(1L)).thenReturn(jason); non funziona
 
-        var jasonModule = mockModules.get(0);
-        MvcResult result = mvc.perform(get(BASE_URL + "/{id}", id)
-                    .accept(MediaType.APPLICATION_JSON))
+        MvcResult result = mvc.perform(get(BASE_URL + "/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-//                .andDo(print())
-                .andExpect(jsonPath("$.id", comparesEqualTo(jasonModule.getId().intValue())))
-                .andExpect(jsonPath("$.name", is(jasonModule.getName())))
-//                .andExpect(jsonPath("$.surname", is(jasonModule.getSurname())))
-//                .andExpect(jsonPath("$.birthDate", is(jasonModule.getBirthDate().toString())))
-//                // TODO .andExpect(jsonPath("$.creationTimestamp", is(jasonModule.getCreationTimestamp()))) non funziona
-//                .andExpect(jsonPath("$.age", is(jasonModule.getAge())))
-//                .andExpect(jsonPath("$.type", is(jasonModule.getType().toString())))
+                .andExpect(jsonPath("$.id", comparesEqualTo(1)))
+                .andExpect(jsonPath("$.name", is("Jason")))
+                .andExpect(jsonPath("$.surname", is("Smith")))
+                .andExpect(jsonPath("$.birthDate", is("2000-01-01")))
+                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T11:00:00.000+0000")))
+                .andExpect(jsonPath("$.age", is(19)))
+                .andExpect(jsonPath("$.type", is("OWNER")))
                 .andReturn();
 
+        // check JSON content with JSONAssert too
         String jsonResult = result.getResponse().getContentAsString();
-        System.out.println(jsonResult);
-
-        JSONAssert.assertEquals("{id:1,name:\"Jason\"}",
-                jsonResult,
-                JSONCompareMode.LENIENT);
+        JSONAssert.assertEquals("{id:1,name:\"Jason\"," +
+                        "surname:\"Smith\"," +
+                        "birthDate:\"2000-01-01\"," +
+                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
+                        "age:19," +
+                        "type:\"OWNER\"}",
+                jsonResult, true);
     }
 
     @Test
@@ -107,31 +109,63 @@ public class ModuleControllerUnitTests {
 
     @Test
     public void whenModuleEntityIsPosted_saveItOnDb() throws Exception {
-        Module postedModule = new Module(100L, "Added", "Zzz", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2015-01-01 12:00:00.000"), 19, Type.OWNER);
-        when(mockModulesRepository.save(any(Module.class))).thenReturn(postedModule);
+        Module postedModule = new Module("NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.OWNER);
+        Module savedModule = new Module(1L, "NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.OWNER);
+        when(mockModulesRepository.save(any(Module.class))).thenReturn(savedModule);
 
         ObjectMapper om = new ObjectMapper();
+        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         MvcResult result = mvc.perform(post(BASE_URL)
-//                .contentType(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(SerializableModule.from(postedModule))))
-                .andDo(print())
+//                .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+
+        String jsonResult = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals("{id:1," +
+                        "name:\"NewName\"," +
+                        "surname:\"NewSurname\"," +
+                        "birthDate:\"1977-05-22\"," +
+//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
+//                        "age:19," +
+                        "type:\"OWNER\"}",
+                jsonResult, false);
     }
 
     @Test
     public void whenModuleEntityIsPutted_updateItOnDb() throws Exception {
-        Module puttedModule = new Module(2L, "Alice", "Zzz", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2019-02-02 01:01:01.001"), 19, Type.CHILD);
-        when(mockModulesRepository.save(any(Module.class))).thenReturn(puttedModule);
+        Module module = mockModules.get(0);
+        var optionalModule = Optional.of(module);
+        doReturn(optionalModule).when(mockModulesRepository).findById(1L);
+
+        Module updatedModule = new Module(module.getId(),
+                "NewName",
+                module.getSurname(),
+                module.getBirthDate(),
+                module.getCreationTimestamp(),
+                module.getAge(),
+                module.getType());
+        when(mockModulesRepository.save(any(Module.class))).thenReturn(updatedModule);
 
         ObjectMapper om = new ObjectMapper();
+        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         MvcResult result = mvc.perform(put(BASE_URL)
-                .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
-                .content(om.writeValueAsString(SerializableModule.from(puttedModule))))
-                .andDo(print())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(om.writeValueAsString(SerializableModule.from(updatedModule))))
+//                .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
+
+        String jsonResult = result.getResponse().getContentAsString();
+        JSONAssert.assertEquals("{id:1," +
+                        "name:\"NewName\"," +
+                        "surname:\"Smith\"," +
+                        "birthDate:\"2000-01-01\"," +
+//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
+//                        "age:19," +
+                        "type:\"OWNER\"}",
+                jsonResult, false);
     }
 
     private List<Module> getMockModules() {
@@ -150,7 +184,6 @@ public class ModuleControllerUnitTests {
     }
 }
 
-//@Component
 class SerializableModule {
     private Long id;
 
@@ -184,5 +217,9 @@ class SerializableModule {
                 module.getCreationTimestamp().toLocalDateTime().toString(),
                 module.getAge(),
                 module.getType());
+    }
+
+    public Long getId() {
+        return id;
     }
 }

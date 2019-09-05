@@ -100,9 +100,8 @@ public class ModuleController {
 
     // ********** PUT requests **********
     @PutMapping()
-    public ResponseEntity<Module> updateModule(@Valid @RequestBody Module module) throws ModuleNotFoundException {
+    public Module updateModule(@Valid @RequestBody Module module) throws ModuleNotFoundException {
         Long id = module.getId();
-
         Module moduleToUpdate = fetchModuleById(id);
 
         moduleToUpdate.setName(module.getName());
@@ -114,7 +113,8 @@ public class ModuleController {
 
         Module updatedModule = modulesRepository.save(moduleToUpdate);
 
-        return ResponseEntity.ok(updatedModule);
+//        return ResponseEntity.ok(updatedModule);
+        return updatedModule;
     }
 
     // ********** DELETE requests **********
@@ -129,8 +129,4 @@ public class ModuleController {
     private Module fetchModuleById(Long id) throws ModuleNotFoundException {
         return modulesRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException("Module not found for id: " + id));
     }
-
-//    private Module fetchModuleById(Long id) throws ModuleNotFoundException {
-//        return modulesRepository.findById(id).get();
-//    }
 }
