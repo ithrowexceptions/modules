@@ -1,7 +1,5 @@
 package it.euris.group1.modules.entities;
 
-import it.euris.group1.modules.more.Type;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -12,23 +10,25 @@ public class Module {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Column(nullable = false)
+    @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
 
-    @Column(nullable = false)
+    @Column(name = "creation_timestamp", nullable = false)
     private Timestamp creationTimestamp;
 
-    @Column(nullable = false)
+    @Column(name = "age", nullable = false)
     private Integer age;
 
+    @Column(name = "type", nullable = false)
     private Type type;
 
     public Module() {
@@ -45,13 +45,15 @@ public class Module {
         this.type = type;
     }
 
-    public Module(String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age, Type type) {
+    public Module(Long id, String name, String surname, LocalDate birthDate, Type type) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.birthDate = birthDate;
-        this.creationTimestamp = creationTimestamp;
-        this.age = age;
         this.type = type;
+        setCreationTimestamp();
+        setAge();
+
     }
 
     public Long getId() {
@@ -90,17 +92,25 @@ public class Module {
         return creationTimestamp;
     }
 
-    public void setCreationTimestamp(Timestamp creationTimestamp) {
-        this.creationTimestamp = creationTimestamp;
+    public void setCreationTimestamp() {
+        this.creationTimestamp = new Timestamp(System.currentTimeMillis());
     }
+
 
     public Integer getAge() {
         return age;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+
+    public void setAge() {
+
+        if (birthDate.getMonthValue() <= LocalDate.now().getMonthValue()) {
+            this.age = LocalDate.now().getYear() - birthDate.getYear();
+        }else if (birthDate.getDayOfMonth() < LocalDate.now().getDayOfMonth() && (birthDate.getMonthValue() == LocalDate.now().getMonthValue()))
+        {  this.age = LocalDate.now().getYear() - birthDate.getYear();}
+        else this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
     }
+
 
     public Type getType() {
         return type;
