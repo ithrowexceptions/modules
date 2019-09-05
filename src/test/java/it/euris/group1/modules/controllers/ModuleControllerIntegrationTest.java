@@ -19,7 +19,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ModulesApplication.class)
 @AutoConfigureMockMvc
-public class ModuleControllerTest {
+public class ModuleControllerIntegrationTest {
     @Autowired
     private MockMvc mvc;
     @Autowired
