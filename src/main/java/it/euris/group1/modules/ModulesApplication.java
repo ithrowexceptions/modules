@@ -17,17 +17,14 @@ import java.util.List;
 
 @SpringBootApplication
 public class ModulesApplication {
-    private static final Logger log = LoggerFactory.getLogger(ModulesApplication.class);
+    // private static final Logger log = LoggerFactory.getLogger(ModulesApplication.class);
 
     public static void main(String[] args) {
-        SpringApplication.run(ModulesApplication.class);
+        SpringApplication.run(ModulesApplication.class, args);
     }
-
 
   /*  @Bean
     public CommandLineRunner demo(ModulesRepository repository) {
-
-
         return args -> {
             //save some modules
             repository.save(new Module(1L, "Jason", "Smith", LocalDate.of(2000, 1, 1), Type.OWNER));
@@ -40,12 +37,8 @@ public class ModulesApplication {
             repository.save(new Module(8L, "Greta", "Gunderson", LocalDate.of(1960, 7, 6), Type.CHILD));
             repository.save(new Module(9L, "Hans", "Haskell", LocalDate.of(1975, 8, 8), Type.OWNER));
             repository.save(new Module(10L, "Bob", "Anderson", LocalDate.of(1985, 9, 9), Type.SPOUSE));
-
         };
-
-    }
-*/
-
+    }*/
 }
 
 
