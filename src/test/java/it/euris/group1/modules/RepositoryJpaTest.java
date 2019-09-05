@@ -62,7 +62,7 @@ public class RepositoryJpaTest {
     @Test
     public void should_find_modules_by_TYPE() {
         List<Module> types = repository.findByType(Type.SPOUSE);
-        assertThat(types.get(3)).isEqualTo(repository.findByAge(34).get(0));
+        assertThat(types.get(3)).isEqualTo(repository.findByAge(33).get(0));
     }
 
 
