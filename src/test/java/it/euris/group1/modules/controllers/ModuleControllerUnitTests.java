@@ -1,6 +1,7 @@
 package it.euris.group1.modules.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.euris.group1.modules.ModulesApplication;
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
 import it.euris.group1.modules.repositories.ModulesRepository;
@@ -10,11 +11,14 @@ import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -37,8 +41,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("ciao")
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = ModuleController.class)
+@SpringBootTest(classes = ModulesApplication.class)
+@AutoConfigureMockMvc
+//@RunWith(SpringRunner.class)
+//@WebMvcTest(value = ModuleController.class)
 public class ModuleControllerUnitTests {
     private List<Module> mockModules;
     private static final String BASE_URL = "/modules";
@@ -142,7 +150,7 @@ public class ModuleControllerUnitTests {
     }
 }
 
-@Component
+//@Component
 class SerializableModule {
     private Long id;
 

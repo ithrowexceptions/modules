@@ -1,19 +1,7 @@
 package it.euris.group1.modules;
 
-import it.euris.group1.modules.entities.Module;
-import it.euris.group1.modules.entities.Type;
-import it.euris.group1.modules.repositories.ModulesRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 public class ModulesApplication {

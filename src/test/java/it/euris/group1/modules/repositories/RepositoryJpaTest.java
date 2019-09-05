@@ -1,4 +1,4 @@
-package it.euris.group1.modules;
+package it.euris.group1.modules.repositories;
 
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;

@@ -15,12 +15,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.Assert.assertNotNull;
 
-//@ActiveProfiles("ciao")
-//@RunWith(SpringRunner.class)
-//@SpringBootTest(classes = ModulesApplication.class)
-//@AutoConfigureMockMvc
+@ActiveProfiles("ciao")
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = ModuleController.class)
+@SpringBootTest(classes = ModulesApplication.class)
+@AutoConfigureMockMvc
 public class ModuleControllerTest {
     @Autowired
     private MockMvc mvc;
