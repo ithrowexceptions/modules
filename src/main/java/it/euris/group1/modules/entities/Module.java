@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "modules")
 public class Module {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -33,6 +34,7 @@ public class Module {
     public Module() {
     }
 
+
     public Module(Long id, String name, String surname, LocalDate birthDate, Timestamp creationTimestamp, Integer age, Type type) {
         this.id = id;
         this.name = name;
@@ -51,15 +53,7 @@ public class Module {
         this.type = type;
         setCreationTimestamp();
         setAge();
-    }
 
-    public Module(String name, String surname, LocalDate birthDate, Type type) {
-        this.name = name;
-        this.surname = surname;
-        this.birthDate = birthDate;
-        this.type = type;
-        setCreationTimestamp();
-        setAge();
     }
 
     public Long getId() {
@@ -102,23 +96,20 @@ public class Module {
         this.creationTimestamp = new Timestamp(System.currentTimeMillis());
     }
 
-    public void setCreationTimestamp(Timestamp timestamp) {
-        this.creationTimestamp = timestamp;
-    }
 
     public Integer getAge() {
         return age;
     }
 
+
     public void setAge() {
-        if ((birthDate.getMonthValue() <= LocalDate.now().getMonthValue()) ||
-                ((birthDate.getMonthValue() == LocalDate.now().getMonthValue()) &&
-                  birthDate.getDayOfMonth() < LocalDate.now().getDayOfMonth())
-        ) {
+        if ((birthDate.getMonthValue() < LocalDate.now().getMonthValue())||(birthDate.getDayOfMonth() <= LocalDate.now().getDayOfMonth() && (birthDate.getMonthValue() == LocalDate.now().getMonthValue()))) {
             this.age = LocalDate.now().getYear() - birthDate.getYear();
-        } else {
-            this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
-        }
+           } else this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
+    }
+
+    public void setCreationTimestamp(Timestamp creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 
     public void setAge(Integer age) {
@@ -132,4 +123,6 @@ public class Module {
     public void setType(Type type) {
         this.type = type;
     }
+
+
 }
