@@ -103,14 +103,18 @@ public class Module {
 
 
     public void setAge() {
-
-        if (birthDate.getMonthValue() <= LocalDate.now().getMonthValue()) {
+        if ((birthDate.getMonthValue() < LocalDate.now().getMonthValue())||(birthDate.getDayOfMonth() <= LocalDate.now().getDayOfMonth() && (birthDate.getMonthValue() == LocalDate.now().getMonthValue()))) {
             this.age = LocalDate.now().getYear() - birthDate.getYear();
-        }else if (birthDate.getDayOfMonth() < LocalDate.now().getDayOfMonth() && (birthDate.getMonthValue() == LocalDate.now().getMonthValue()))
-        {  this.age = LocalDate.now().getYear() - birthDate.getYear();}
-        else this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
+           } else this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
     }
 
+    public void setCreationTimestamp(Timestamp creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
     public Type getType() {
         return type;

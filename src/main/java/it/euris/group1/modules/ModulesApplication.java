@@ -24,7 +24,7 @@ public class ModulesApplication {
     }
 
 
-  /*  @Bean
+  /* @Bean
     public CommandLineRunner demo(ModulesRepository repository) {
 
 
