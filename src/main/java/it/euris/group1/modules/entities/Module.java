@@ -51,7 +51,15 @@ public class Module {
         this.type = type;
         setCreationTimestamp();
         setAge();
+    }
 
+    public Module(String name, String surname, LocalDate birthDate, Type type) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.type = type;
+        setCreationTimestamp();
+        setAge();
     }
 
     public Long getId() {
@@ -94,21 +102,28 @@ public class Module {
         this.creationTimestamp = new Timestamp(System.currentTimeMillis());
     }
 
+    public void setCreationTimestamp(Timestamp timestamp) {
+        this.creationTimestamp = timestamp;
+    }
 
     public Integer getAge() {
         return age;
     }
 
-
     public void setAge() {
-
-        if (birthDate.getMonthValue() <= LocalDate.now().getMonthValue()) {
+        if ((birthDate.getMonthValue() <= LocalDate.now().getMonthValue()) ||
+                ((birthDate.getMonthValue() == LocalDate.now().getMonthValue()) &&
+                  birthDate.getDayOfMonth() < LocalDate.now().getDayOfMonth())
+        ) {
             this.age = LocalDate.now().getYear() - birthDate.getYear();
-        }else if (birthDate.getDayOfMonth() < LocalDate.now().getDayOfMonth() && (birthDate.getMonthValue() == LocalDate.now().getMonthValue()))
-        {  this.age = LocalDate.now().getYear() - birthDate.getYear();}
-        else this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
+        } else {
+            this.age = LocalDate.now().getYear() - birthDate.getYear() - 1;
+        }
     }
 
+    public void setAge(Integer age ) {
+        this.age = age;
+    }
 
     public Type getType() {
         return type;
