@@ -121,7 +121,7 @@ public class ModuleControllerUnitTests {
                         "surname:\"NewSurname\"," +
                         "birthDate:\"1977-05-22\"," +
 //                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-//                        "age:19," +
+                        "age:42," +
                         "type:\"OWNER\"}",
                 jsonResult, false);
     }
@@ -142,11 +142,11 @@ public class ModuleControllerUnitTests {
         when(mockModulesRepository.save(any(Module.class))).thenReturn(updatedModule);
 
         ObjectMapper om = new ObjectMapper();
-        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        om.registerModule(new JavaTimeModule());
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         MvcResult result = mvc.perform(put(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(SerializableModule.from(updatedModule))))
-//                .andDo(print())
+                .content(om.writeValueAsString(updatedModule)))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -156,7 +156,7 @@ public class ModuleControllerUnitTests {
                         "surname:\"Smith\"," +
                         "birthDate:\"2000-01-01\"," +
 //                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-//                        "age:19," +
+                        "age:19," +
                         "type:\"OWNER\"}",
                 jsonResult, false);
     }
@@ -169,7 +169,6 @@ public class ModuleControllerUnitTests {
         doNothing().when(mockModulesRepository).delete(module);
 
         ObjectMapper om = new ObjectMapper();
-        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         MvcResult result = mvc.perform(delete(BASE_URL + "/{id}", 1L))
                 .andExpect(status().isAccepted())
                 .andReturn();
@@ -188,45 +187,5 @@ public class ModuleControllerUnitTests {
                 new Module(9L, "Hans", "Haskell", LocalDate.of(1975, 8, 8), Timestamp.valueOf("2013-09-09 12:00:00.000"), 44, Type.OWNER),
                 new Module(10L, "Bob", "Anderson", LocalDate.of(1985, 9, 9), Timestamp.valueOf(" 2016-08-08 00:00:00.000"), 34, Type.SPOUSE)
         );
-    }
-}
-
-class SerializableModule {
-    private Long id;
-
-    private String name;
-
-    private String surname;
-
-    private String birthDate;
-
-    private String creationTimestamp;
-
-    private Integer age;
-
-    private Type type;
-
-    private SerializableModule(Long id, String name, String surname, String birthDate, String creationTimestamp, Integer age, Type type) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.birthDate = birthDate;
-        this.creationTimestamp = creationTimestamp;
-        this.age = age;
-        this.type = type;
-    }
-
-    static SerializableModule from(Module module) {
-        return new SerializableModule(module.getId(),
-                module.getName(),
-                module.getSurname(),
-                module.getBirthDate().toString(),
-                module.getCreationTimestamp().toLocalDateTime().toString(),
-                module.getAge(),
-                module.getType());
-    }
-
-    public Long getId() {
-        return id;
     }
 }
