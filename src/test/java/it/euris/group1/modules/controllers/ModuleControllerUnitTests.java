@@ -2,6 +2,7 @@ package it.euris.group1.modules.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import it.euris.group1.modules.ModulesApplication;
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
@@ -106,11 +107,11 @@ public class ModuleControllerUnitTests {
         when(mockModulesRepository.save(any(Module.class))).thenReturn(savedModule);
 
         ObjectMapper om = new ObjectMapper();
-        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        om.registerModule(new JavaTimeModule());
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         MvcResult result = mvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(om.writeValueAsString(SerializableModule.from(postedModule))))
-//                .andDo(print())
+                .content(om.writeValueAsString(postedModule)))
                 .andExpect(status().isOk())
                 .andReturn();
 
