@@ -53,7 +53,15 @@ public class Module {
         this.type = type;
         setCreationTimestamp();
         setAge();
+    }
 
+    public Module(String name, String surname, LocalDate birthDate, Type type) {
+        this.name = name;
+        this.surname = surname;
+        this.birthDate = birthDate;
+        this.type = type;
+        setCreationTimestamp();
+        setAge();
     }
 
     public Long getId() {

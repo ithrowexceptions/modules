@@ -17,7 +17,7 @@ public interface ModulesRepository  extends JpaRepository<Module,Long> {
         List<Module> findByBirthDate(LocalDate birthDate);
         List<Module> findByAge(Integer age);
         List<Module> findByType (Enum type);
-       // List<Module> findByTimestamp(Timestamp timestamp);
+        List<Module> findByCreationTimestamp(Timestamp timestamp);
 
 
 }
