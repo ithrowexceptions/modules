@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -65,9 +66,10 @@ public class ModuleController {
 
     @GetMapping("/timestamp/{creationTimestamp}")
     public List<Module> getModulesByTimestamp(@PathVariable("creationTimestamp") String moduleCreationTimestamp) {
-        Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp);
-        // TODO
-        return null;
+        Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp.replace('T', ' '));
+//        Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp);
+        System.out.println(timestamp);
+        return modulesRepository.findByCreationTimestamp(timestamp);
     }
 
     @GetMapping("/age/{age}")
@@ -87,29 +89,15 @@ public class ModuleController {
         return modulesRepository.findByType(type);
     }
 
-//    @GetMapping(name = "/page/", params = "{page, size}")
-//    public ResponseEntity<PagedResources<Module>> getModulePage(@RequestParam("page") int page,
-//                                                                @RequestParam("size") int size,
-//                                                                PagedResourcesAssembler assembler) {
-//        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
-//        Page<Module> modules = modulesRepository.findAll(pageable);
-//        PagedResources<Module> pr = assembler.toResource(modules, linkTo(ModuleController.class).slash("/page").withSelfRel());
-//        HttpHeaders responseHeaders = new HttpHeaders();
-//        responseHeaders.add("Link", createLinkHeader(pr));
-//        return new ResponseEntity<>(assembler.toResource(modules, linkTo(ModuleController.class).slash("/page").withSelfRel()), responseHeaders, HttpStatus.OK);
-//    }
-//
-//    private String createLinkHeader(PagedResources<Module> pr) {
-//        final StringBuilder linkHeader = new StringBuilder();
-//        linkHeader.append(buildLinkHeader(pr.getLinks("first").get(0).getHref(), "first"));
-//        linkHeader.append(", ");
-//        linkHeader.append(buildLinkHeader(pr.getLinks("next").get(0).getHref(), "next"));
-//        return linkHeader.toString();
-//    }
-//
-//    public static String buildLinkHeader(final String uri, final String rel) {
-//        return "<" + uri + ">; rel=\"" + rel + "\"";
-//    }
+    @GetMapping("/page")
+    public List<Module> getModulePage(@RequestParam(value = "page", defaultValue = "0") int page,
+                                   @RequestParam(value = "size", defaultValue = "5") int size) {
+        Pageable sortedByName = PageRequest.of(page, size, Sort.by("name"));
+        Page<Module> users = modulesRepository.findAll(sortedByName);
+        List<Module> userEntities = users.getContent();
+        return userEntities;
+    }
+
 
 //    @GetMapping("/report/{id}")
 //    public void getReport(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {

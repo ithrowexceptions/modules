@@ -1,4 +1,4 @@
-package it.euris.group1.modules;
+package it.euris.group1.modules.repositories;
 
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
@@ -21,7 +21,6 @@ public class TestConfig {
         List<Timestamp> timestamps = new ArrayList<>(10);
 
         return args -> {
-
             timestamps.add(Timestamp.valueOf("2015-01-01 12:00:00.000"));
             timestamps.add(Timestamp.valueOf("2019-02-02 01:01:01.001"));
             timestamps.add(Timestamp.valueOf("2018-03-03 02:02:01.002"));
@@ -32,8 +31,6 @@ public class TestConfig {
             timestamps.add(Timestamp.valueOf("2014-08-08 17:07:07.007"));
             timestamps.add(Timestamp.valueOf("2013-09-09 12:00:00.000"));
             timestamps.add(Timestamp.valueOf("2016-08-08 00:00:00.000"));
-
-
 
             //save some modules
             repository.save(new Module(1L, "Jason", "Smith", LocalDate.of(2000, 1, 1), timestamps.get(0), 19, Type.OWNER));
@@ -47,9 +44,6 @@ public class TestConfig {
             repository.save(new Module(9L, "Hans", "Haskell", LocalDate.of(1975, 8, 8), timestamps.get(8), 44, Type.OWNER));
             repository.save(new Module(10L, "Bob", "Anderson", LocalDate.of(1985, 9, 9), timestamps.get(9), 33, Type.SPOUSE));
             repository.flush();
-
         };
-
-
     }
 }
