@@ -71,8 +71,12 @@ public class RepositoryJpaTest {
 
     @Test
     public void should_find_modules_by_creation_Timestamp() {
-        List<Module> timestamps = repository.findByCreationTimestamp(Timestamp.valueOf("2015-01-01 12:00:00.000"));
-        assertThat(timestamps.get(0).getCreationTimestamp()).isEqualTo(Timestamp.valueOf("2015-01-01 12:00:00.000"));
+        Module prova = new Module(1L, "Jason", "Smith", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2015-01-01 12:00:00.000"), 19, Type.OWNER);
+        assertThat(prova.getCreationTimestamp()).isEqualTo(repository.findByCreationTimestamp(Timestamp.valueOf("2015-01-01 12:00:00.000")).get(0).getCreationTimestamp());
+
     }
+
+
+
 
 }
