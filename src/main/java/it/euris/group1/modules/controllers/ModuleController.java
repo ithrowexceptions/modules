@@ -21,14 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
-
-//import net.sf.jasperreports.engine.*;
-//import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-//import net.sf.jasperreports.engine.export.HtmlExporter;
-//import net.sf.jasperreports.export.SimpleExporterInput;
-//import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
-
 @RestController
 @RequestMapping("/modules")
 public class ModuleController {
@@ -65,6 +57,7 @@ public class ModuleController {
 
     @GetMapping("/timestamp/{creationTimestamp}")
     public List<Module> getModulesByTimestamp(@PathVariable("creationTimestamp") String moduleCreationTimestamp) {
+        // TODO bug: richieste di get su timestamp passano ma non restituiscon alcun risultato
         Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp.replace('T', ' '));
 //        Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp);
         System.out.println(timestamp);
@@ -115,57 +108,13 @@ public class ModuleController {
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(List.of(module));
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dataSource);
         byte[] bytes = JasperExportManager.exportReportToPdf(jasperPrint);
+
         return ResponseEntity
                 .ok()
-                // Specify content type as PDF
                 .header("Content-Type", "application/pdf; charset=UTF-8")
-                // Tell browser to display PDF if it can
                 .header("Content-Disposition", "inline; filename=\"module id:" + id + ".pdf\"")
                 .body(bytes);
     }
-
-/*
-    @GetMapping("/report/{id}")
-    public void getReport(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
-        Module module = modulesRepository
-                .findById(id)
-                .orElseThrow(() -> new ModuleNotFoundException("Module not found for id: " + id));
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("id", module.getId());
-        result.put("name", module.getName());
-        result.put("surname", module.getSurname());
-        result.put("birthDate", module.getBirthDate());
-
-        response.setContentType("application/pdf");
-
-        InputStream inputStream = getClass().getResourceAsStream("/reports/module-report.jrxml.OLD");
-        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
-//        JRSaver.saveObject(jasperReport, "employeeReport.jasper"); // To avoid compiling it every time, we can save it to a file
-        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(List.of(result));
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, null, dataSource);
-
-        JRPdfExporter exporter = new JRPdfExporter();
-        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("module.pdf"));
-        SimplePdfReportConfiguration reportConfig
-                = new SimplePdfReportConfiguration();
-        reportConfig.setSizePageToContent(true);
-        reportConfig.setForceLineBreakPolicy(false);
-        SimplePdfExporterConfiguration exportConfig
-                = new SimplePdfExporterConfiguration();
-        exportConfig.setMetadataAuthor("gruppo1");
-        exportConfig.setEncrypted(true);
-        exportConfig.setAllowedPermissionsHint("PRINTING");
-        exporter.setConfiguration(reportConfig);
-        exporter.setConfiguration(exportConfig);
-        exporter.exportReport();
-//        HtmlExporter exporter = new HtmlExporter(DefaultJasperReportsContext.getInstance());
-//        exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        exporter.setExporterOutput(new SimpleHtmlExporterOutput(response.getWriter()));
-//        exporter.exportReport();
-    }
-*/
 
     // ********** POST requests **********
     @PostMapping()
