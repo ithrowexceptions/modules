@@ -1,8 +1,18 @@
 package it.euris.group1.modules.controllers;
 
 import it.euris.group1.modules.entities.Module;
+import it.euris.group1.modules.entities.Type;
 import it.euris.group1.modules.repositories.ModulesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.PagedResources;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +20,8 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 //import net.sf.jasperreports.engine.*;
 //import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -59,15 +71,45 @@ public class ModuleController {
     }
 
     @GetMapping("/age/{age}")
-    public List<Module> getModulesByAge(@PathVariable("creationTimestamp") Integer moduleAge) {
+    public List<Module> getModulesByAge(@PathVariable("age") Integer moduleAge) {
         return modulesRepository.findByAge(moduleAge);
     }
 
     @GetMapping("/type/{type}")
-    public List<Module> getModulesByType(@PathVariable("type") String moduleType) {
-        // TODO
-        return null;
+    public List<Module> getModulesByType(@PathVariable("type") String moduleType) throws ModuleNotFoundException {
+        Type type;
+        switch(moduleType) {
+            case "OWNER": type = Type.OWNER; break;
+            case "SPOUSE": type = Type.SPOUSE; break;
+            case "CHILD": type = Type.CHILD; break;
+            default: throw new ModuleNotFoundException();
+        }
+        return modulesRepository.findByType(type);
     }
+
+//    @GetMapping(name = "/page/", params = "{page, size}")
+//    public ResponseEntity<PagedResources<Module>> getModulePage(@RequestParam("page") int page,
+//                                                                @RequestParam("size") int size,
+//                                                                PagedResourcesAssembler assembler) {
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("name"));
+//        Page<Module> modules = modulesRepository.findAll(pageable);
+//        PagedResources<Module> pr = assembler.toResource(modules, linkTo(ModuleController.class).slash("/page").withSelfRel());
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        responseHeaders.add("Link", createLinkHeader(pr));
+//        return new ResponseEntity<>(assembler.toResource(modules, linkTo(ModuleController.class).slash("/page").withSelfRel()), responseHeaders, HttpStatus.OK);
+//    }
+//
+//    private String createLinkHeader(PagedResources<Module> pr) {
+//        final StringBuilder linkHeader = new StringBuilder();
+//        linkHeader.append(buildLinkHeader(pr.getLinks("first").get(0).getHref(), "first"));
+//        linkHeader.append(", ");
+//        linkHeader.append(buildLinkHeader(pr.getLinks("next").get(0).getHref(), "next"));
+//        return linkHeader.toString();
+//    }
+//
+//    public static String buildLinkHeader(final String uri, final String rel) {
+//        return "<" + uri + ">; rel=\"" + rel + "\"";
+//    }
 
 //    @GetMapping("/report/{id}")
 //    public void getReport(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
