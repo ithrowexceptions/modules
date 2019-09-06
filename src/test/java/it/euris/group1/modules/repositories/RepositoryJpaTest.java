@@ -7,10 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.scripting.ScriptSource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
@@ -20,7 +18,7 @@ import java.util.List;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest
 @Import(TestConfig.class)
 public class RepositoryJpaTest {
 
@@ -67,9 +65,14 @@ public class RepositoryJpaTest {
     @Test
     public void should_find_modules_by_TYPE() {
         List<Module> types = repository.findByType(Type.SPOUSE);
-        assertThat(types.get(3)).isEqualTo(repository.findByAge(33).get(0));
+        assertThat(types.size()).isEqualTo(4);
     }
 
 
-}
+    @Test
+    public void should_find_modules_by_creation_Timestamp() {
+        List<Module> timestamps = repository.findByCreationTimestamp(Timestamp.valueOf("2015-01-01 12:00:00.000"));
+        assertThat(timestamps.get(0).getCreationTimestamp()).isEqualTo(Timestamp.valueOf("2015-01-01 12:00:00.000"));
+    }
 
+}
