@@ -5,7 +5,7 @@ import { EditModuleComponent } from './components/edit-module/edit-module.compon
 import { ModuleListComponent } from './components/module-list/module-list.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'modules-list' },
+  { path: '', pathMatch: 'full', redirectTo: 'modules' },
   { path: 'add-module', component: AddModuleComponent },
   { path: 'edit-module/:id', component: EditModuleComponent },
   { path: 'modules', component: ModuleListComponent },
