@@ -29,3 +29,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/frontend/src/main/angular/node/node_modules/
+/frontend/src/main/angular/node/node.exe
+/frontend/src/main/angular/node/npm
+/frontend/src/main/angular/node/npm.cmd
