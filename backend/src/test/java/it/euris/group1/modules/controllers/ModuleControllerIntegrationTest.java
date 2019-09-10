@@ -100,7 +100,7 @@ public class ModuleControllerIntegrationTest {
         MvcResult result = mvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(postedModule)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
@@ -132,7 +132,7 @@ public class ModuleControllerIntegrationTest {
         MvcResult result = mvc.perform(put(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(updatedModule)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
