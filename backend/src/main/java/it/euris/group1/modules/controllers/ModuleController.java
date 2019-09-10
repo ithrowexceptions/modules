@@ -1,5 +1,6 @@
 package it.euris.group1.modules.controllers;
 
+import it.euris.group1.modules.controllers.specifications.ModuleSpecification;
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
 import it.euris.group1.modules.repositories.ModulesRepository;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,18 +74,25 @@ public class ModuleController {
     @GetMapping("/type/{type}")
     public List<Module> getModulesByType(@PathVariable("type") String moduleType) throws ModuleNotFoundException {
         Type type;
-        switch(moduleType) {
-            case "OWNER": type = Type.OWNER; break;
-            case "SPOUSE": type = Type.SPOUSE; break;
-            case "CHILD": type = Type.CHILD; break;
-            default: throw new ModuleNotFoundException();
+        switch (moduleType) {
+            case "OWNER":
+                type = Type.OWNER;
+                break;
+            case "SPOUSE":
+                type = Type.SPOUSE;
+                break;
+            case "CHILD":
+                type = Type.CHILD;
+                break;
+            default:
+                throw new ModuleNotFoundException();
         }
         return modulesRepository.findByType(type);
     }
 
     @GetMapping("/page")
     public List<Module> getModulePage(@RequestParam(value = "page", defaultValue = "0") int page,
-                                   @RequestParam(value = "size", defaultValue = "5") int size) {
+                                      @RequestParam(value = "size", defaultValue = "5") int size) {
         Pageable sortedByName = PageRequest.of(page, size, Sort.by("name"));
         Page<Module> users = modulesRepository.findAll(sortedByName);
         List<Module> userEntities = users.getContent();
@@ -114,6 +123,45 @@ public class ModuleController {
                 .header("Content-Type", "application/pdf; charset=UTF-8")
                 .header("Content-Disposition", "inline; filename=\"module id:" + id + ".pdf\"")
                 .body(bytes);
+    }
+
+    @GetMapping("/search")
+    public Page<Module> searchModules(@RequestParam(name = "name", required = false) String name,
+                                      @RequestParam(name = "surname", required = false) String surname,
+                                      @RequestParam(name = "birthdate", required = false) String birthdate,
+                                      @RequestParam(name = "timestamp", required = false) String creationTimestamp,
+                                      @RequestParam(name = "age", required = false) Integer age,
+                                      @RequestParam(name = "type", required = false) String type,
+                                      Pageable page) throws ModuleNotFoundException {
+        Module module = new Module();
+        if (name != null)
+            module.setName(name);
+        if (surname != null)
+            module.setSurname(surname);
+        if (age != null)
+            module.setAge(age);
+//        if (birthdate != null) {
+//            LocalDate moduleBirthdate = LocalDate.parse(birthdate);
+//            module.setBirthDate(moduleBirthdate);
+//        }
+//        Timestamp timestamp = Timestamp.valueOf(creationTimestamp.replace('T', ' '));
+//        Type moduleType;
+//        switch (type) {
+//            case "OWNER":
+//                moduleType = Type.OWNER;
+//                break;
+//            case "SPOUSE":
+//                moduleType = Type.SPOUSE;
+//                break;
+//            case "CHILD":
+//                moduleType = Type.CHILD;
+//                break;
+//            default:
+//                throw new ModuleNotFoundException();
+//        }
+
+        Specification<Module> specification = new ModuleSpecification(module);
+        return modulesRepository.findAll(specification, page);
     }
 
     // ********** POST requests **********
