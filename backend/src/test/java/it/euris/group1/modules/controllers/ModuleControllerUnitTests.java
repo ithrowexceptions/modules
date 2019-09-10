@@ -75,7 +75,7 @@ public class ModuleControllerUnitTests {
                 .andExpect(jsonPath("$.name", is("Jason")))
                 .andExpect(jsonPath("$.surname", is("Smith")))
                 .andExpect(jsonPath("$.birthDate", is("2000-01-01")))
-                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T11:00:00.000+0000")))
+                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T13:00:00.000+0200")))
                 .andExpect(jsonPath("$.age", is(19)))
                 .andExpect(jsonPath("$.type", is("OWNER")))
                 .andReturn();
@@ -85,7 +85,7 @@ public class ModuleControllerUnitTests {
         JSONAssert.assertEquals("{id:1,name:\"Jason\"," +
                         "surname:\"Smith\"," +
                         "birthDate:\"2000-01-01\"," +
-                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
+                        "creationTimestamp:\"2015-01-01T13:00:00.000+0200\"," +
                         "age:19," +
                         "type:\"OWNER\"}",
                 jsonResult, true);
@@ -113,7 +113,7 @@ public class ModuleControllerUnitTests {
         MvcResult result = mvc.perform(post(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(postedModule)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
@@ -148,7 +148,7 @@ public class ModuleControllerUnitTests {
         MvcResult result = mvc.perform(put(BASE_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(updatedModule)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
