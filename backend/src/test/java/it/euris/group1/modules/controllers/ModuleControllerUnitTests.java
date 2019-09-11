@@ -16,13 +16,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,21 +41,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ModulesApplication.class)
 @AutoConfigureMockMvc
-//@RunWith(SpringRunner.class)
-//@WebMvcTest(value = ModuleController.class)
 public class ModuleControllerUnitTests {
-    private List<Module> mockModules;
     private static final String BASE_URL = "/modules";
+
+    private List<Module> mockModules;
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private ModulesRepository mockModulesRepository;
+    private ModulesRepository repo;
 
     @Before
     public void setUp() {
         mockModules = getMockModules();
+
+        Module jasonModule = mockModules.get(0);
+        var jasonOptionalModule = Optional.of(mockModules.get(0));
+        Module savedModule = new Module(1L, "NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.CHILD);
+
+        doReturn(jasonOptionalModule).when(repo).findById(1L);
+        when(repo.findAll()).thenReturn(mockModules);
+        when(repo.save(any(Module.class))).thenReturn(savedModule);
+        doNothing().when(repo).delete(jasonModule);
     }
 
     @Test
@@ -64,37 +73,41 @@ public class ModuleControllerUnitTests {
 
     @Test
     public void whenModuledIsProvided_thenRetrievedNameIsCorrect() throws Exception {
-        var jasonOptionalModule = Optional.of(mockModules.get(0));
-        doReturn(jasonOptionalModule).when(mockModulesRepository).findById(1L);
-        // when(modulesRepository.findById(1L)).thenReturn(jason); non funziona
+        LocalDateTime timestamp = mockModules.get(0).getCreationTimestamp().toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedTimestamp = timestamp
+                .plusHours(1)
+                .format(formatter)
+                .replace(' ', 'T')
+                .concat("+0200");
 
-        MvcResult result = mvc.perform(get(BASE_URL + "/{id}", 1L)
+        MvcResult result = mvc.perform(get(BASE_URL + "/{id}", mockModules.get(0).getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", comparesEqualTo(1)))
-                .andExpect(jsonPath("$.name", is("Jason")))
-                .andExpect(jsonPath("$.surname", is("Smith")))
-                .andExpect(jsonPath("$.birthDate", is("2000-01-01")))
-                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T13:00:00.000+0200")))
-                .andExpect(jsonPath("$.age", is(19)))
-                .andExpect(jsonPath("$.type", is("OWNER")))
+                .andExpect(jsonPath("$.id", comparesEqualTo(mockModules.get(0).getId().intValue())))
+                .andExpect(jsonPath("$.name", is(mockModules.get(0).getName())))
+                .andExpect(jsonPath("$.surname", is(mockModules.get(0).getSurname())))
+                .andExpect(jsonPath("$.birthDate", is(mockModules.get(0).getBirthDate().toString())))
+                .andExpect(jsonPath("$.creationTimestamp", is(formattedTimestamp)))
+                .andExpect(jsonPath("$.age", is(mockModules.get(0).getAge())))
+                .andExpect(jsonPath("$.type", is(mockModules.get(0).getType().toString())))
                 .andReturn();
 
-        // check JSON content with JSONAssert too
+        // Assert JSON content with JSONAssert too for didactic purpose
         String jsonResult = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals("{id:1,name:\"Jason\"," +
-                        "surname:\"Smith\"," +
-                        "birthDate:\"2000-01-01\"," +
-                        "creationTimestamp:\"2015-01-01T13:00:00.000+0200\"," +
-                        "age:19," +
-                        "type:\"OWNER\"}",
+        JSONAssert.assertEquals("{id:" + mockModules.get(0).getId().intValue() +
+                        ",name:\"" + mockModules.get(0).getName() +
+                        "\",surname:\"" + mockModules.get(0).getSurname() +
+                        "\",birthDate:\"" + mockModules.get(0).getBirthDate().toString() +
+                        "\",creationTimestamp:\"" + formattedTimestamp +
+                        "\",age:" + mockModules.get(0).getAge() +
+                        ",type:\"" + mockModules.get(0).getType().toString() +
+                        "\"}",
                 jsonResult, true);
     }
 
     @Test
     public void whenModuleIsNotProvided_thenRetrieveAllModules() throws Exception {
-        when(mockModulesRepository.findAll()).thenReturn(mockModules);
-
         MvcResult result = mvc.perform(get(BASE_URL).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(getMockModules().size())))
@@ -103,9 +116,7 @@ public class ModuleControllerUnitTests {
 
     @Test
     public void whenModuleEntityIsPosted_saveItOnDb() throws Exception {
-        Module postedModule = new Module("NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.OWNER);
-        Module savedModule = new Module(1L, "NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.OWNER);
-        when(mockModulesRepository.save(any(Module.class))).thenReturn(savedModule);
+        Module postedModule = new Module("NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.CHILD);
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
@@ -117,30 +128,17 @@ public class ModuleControllerUnitTests {
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals("{id:1," +
-                        "name:\"NewName\"," +
-                        "surname:\"NewSurname\"," +
-                        "birthDate:\"1977-05-22\"," +
-//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-                        "age:42," +
-                        "type:\"OWNER\"}",
+        JSONAssert.assertEquals("{name:\"" + postedModule.getName() +
+                        "\",surname:\"" + postedModule.getSurname() +
+                        "\",birthDate:\"" + postedModule.getBirthDate().toString() +
+                        "\",type:\"" + postedModule.getType().toString() +
+                        "\"}",
                 jsonResult, false);
     }
 
     @Test
     public void whenModuleEntityIsPutted_updateItOnDb() throws Exception {
-        Module module = mockModules.get(0);
-        var optionalModule = Optional.of(module);
-        doReturn(optionalModule).when(mockModulesRepository).findById(1L);
-
-        Module updatedModule = new Module(module.getId(),
-                "NewName",
-                module.getSurname(),
-                module.getBirthDate(),
-                module.getCreationTimestamp(),
-                module.getAge(),
-                module.getType());
-        when(mockModulesRepository.save(any(Module.class))).thenReturn(updatedModule);
+        Module updatedModule = new Module(1L, "NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.CHILD);
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
@@ -152,25 +150,19 @@ public class ModuleControllerUnitTests {
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals("{id:1," +
-                        "name:\"NewName\"," +
-                        "surname:\"Smith\"," +
-                        "birthDate:\"2000-01-01\"," +
-//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-                        "age:19," +
-                        "type:\"OWNER\"}",
+        JSONAssert.assertEquals("{id:" + updatedModule.getId().intValue() +
+                        ",name:\"" + updatedModule.getName() +
+                        "\",surname:\"" + updatedModule.getSurname() +
+                        "\",birthDate:\"" + updatedModule.getBirthDate().toString() +
+                        "\",age:" + updatedModule.getAge() +
+                        ",type:\"" + updatedModule.getType().toString() +
+                        "\"}",
                 jsonResult, false);
     }
 
     @Test
     public void canDeleteEntityFromDb() throws Exception {
-        Module module = mockModules.get(0);
-        var optionalModule = Optional.of(module);
-        doReturn(optionalModule).when(mockModulesRepository).findById(1L);
-        doNothing().when(mockModulesRepository).delete(module);
-
-        ObjectMapper om = new ObjectMapper();
-        MvcResult result = mvc.perform(delete(BASE_URL + "/{id}", 1L))
+        MvcResult result = mvc.perform(delete(BASE_URL + "/{id}", mockModules.get(0).getId()))
                 .andExpect(status().isAccepted())
                 .andReturn();
     }

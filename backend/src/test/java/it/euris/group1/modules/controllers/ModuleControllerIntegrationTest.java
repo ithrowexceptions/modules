@@ -1,6 +1,5 @@
 package it.euris.group1.modules.controllers;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -42,7 +41,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(TestConfig.class)
 public class ModuleControllerIntegrationTest {
-
     private static final String BASE_URL = "/modules";
 
     @Autowired
