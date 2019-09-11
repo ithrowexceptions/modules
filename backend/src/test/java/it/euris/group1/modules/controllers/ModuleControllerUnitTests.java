@@ -24,6 +24,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ModuleControllerUnitTests {
     private static final String BASE_URL = "/modules";
 
-    private List<Module> mockModules;
+    private static List<Module> mockModules = getMockModules();
 
     @Autowired
     private MockMvc mvc;
@@ -54,7 +56,7 @@ public class ModuleControllerUnitTests {
 
     @Before
     public void setUp() {
-        mockModules = getMockModules();
+//        mockModules = getMockModules();
 
         Module jasonModule = mockModules.get(0);
         var jasonOptionalModule = Optional.of(mockModules.get(0));
@@ -110,7 +112,7 @@ public class ModuleControllerUnitTests {
     public void whenModuleIsNotProvided_thenRetrieveAllModules() throws Exception {
         MvcResult result = mvc.perform(get(BASE_URL).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(getMockModules().size())))
+                .andExpect(jsonPath("$", hasSize(mockModules.size())))
                 .andReturn();
     }
 
@@ -165,10 +167,11 @@ public class ModuleControllerUnitTests {
         MvcResult result = mvc.perform(delete(BASE_URL + "/{id}", mockModules.get(0).getId()))
                 .andExpect(status().isAccepted())
                 .andReturn();
+        mockModules.remove(mockModules.get(0));
     }
 
-    private List<Module> getMockModules() {
-        return List.of(
+    private static List<Module> getMockModules() {
+        return new ArrayList<>(Arrays.asList(
                 new Module(1L, "Jason", "Smith", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2015-01-01 12:00:00.000"), 19, Type.OWNER),
                 new Module(2L, "Alice", "Anderson", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2019-02-02 01:01:01.001"), 19, Type.CHILD),
                 new Module(3L, "Bob", "Anderson", LocalDate.of(1980, 2, 2), Timestamp.valueOf("2018-03-03 02:02:01.002"), 39, Type.SPOUSE),
@@ -179,6 +182,6 @@ public class ModuleControllerUnitTests {
                 new Module(8L, "Greta", "Gunderson", LocalDate.of(1960, 7, 6), Timestamp.valueOf("2014-08-08 17:07:07.007"), 59, Type.CHILD),
                 new Module(9L, "Hans", "Haskell", LocalDate.of(1975, 8, 8), Timestamp.valueOf("2013-09-09 12:00:00.000"), 44, Type.OWNER),
                 new Module(10L, "Bob", "Anderson", LocalDate.of(1985, 9, 9), Timestamp.valueOf(" 2016-08-08 00:00:00.000"), 34, Type.SPOUSE)
-        );
+        ));
     }
 }

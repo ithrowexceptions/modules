@@ -8,6 +8,7 @@ import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
 import it.euris.group1.modules.repositories.ModulesRepository;
 import it.euris.group1.modules.repositories.TestConfig;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -16,21 +17,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,11 +45,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ModuleControllerIntegrationTest {
     private static final String BASE_URL = "/modules";
 
+    private static List<Module> mockModules = getMockModules();
+
     @Autowired
     private MockMvc mvc;
 
     @Autowired
     private ModulesRepository repo;
+
+    @Before
+    public void setUp() {
+//        mockModules = getMockModules();
+    }
 
     @Test
     public void contextLoad() {
@@ -56,41 +65,50 @@ public class ModuleControllerIntegrationTest {
 
     @Test
     public void whenModuledIsProvided_thenRetrievedNameIsCorrect() throws Exception {
-        MvcResult result = mvc.perform(get(BASE_URL + "/{id}", 1L)
+        LocalDateTime timestamp = mockModules.get(0).getCreationTimestamp().toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        String formattedTimestamp = timestamp
+                .plusHours(1)
+                .format(formatter)
+                .replace(' ', 'T')
+                .concat("+0200");
+
+        MvcResult result = mvc.perform(get(BASE_URL + "/{id}", mockModules.get(0).getId())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", comparesEqualTo(1)))
-                .andExpect(jsonPath("$.name", is("Jason")))
-                .andExpect(jsonPath("$.surname", is("Smith")))
-                .andExpect(jsonPath("$.birthDate", is("2000-01-01")))
-//                .andExpect(jsonPath("$.creationTimestamp", is("2015-01-01T11:00:00.000+0000")))
-                .andExpect(jsonPath("$.age", is(19)))
-                .andExpect(jsonPath("$.type", is("OWNER")))
+                .andExpect(jsonPath("$.id", comparesEqualTo(mockModules.get(0).getId().intValue())))
+                .andExpect(jsonPath("$.name", is(mockModules.get(0).getName())))
+                .andExpect(jsonPath("$.surname", is(mockModules.get(0).getSurname())))
+                .andExpect(jsonPath("$.birthDate", is(mockModules.get(0).getBirthDate().toString())))
+                .andExpect(jsonPath("$.creationTimestamp", is(formattedTimestamp)))
+                .andExpect(jsonPath("$.age", is(mockModules.get(0).getAge())))
+                .andExpect(jsonPath("$.type", is(mockModules.get(0).getType().toString())))
                 .andReturn();
 
-        // check JSON content with JSONAssert too, for didactic purpose
+        // Assert JSON content with JSONAssert too for didactic purpose
         String jsonResult = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals("{id:1,name:\"Jason\"," +
-                        "surname:\"Smith\"," +
-                        "birthDate:\"2000-01-01\"," +
-//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-                        "age:19," +
-                        "type:\"OWNER\"}",
-                jsonResult, false);
+        JSONAssert.assertEquals("{id:" + mockModules.get(0).getId().intValue() +
+                        ",name:\"" + mockModules.get(0).getName() +
+                        "\",surname:\"" + mockModules.get(0).getSurname() +
+                        "\",birthDate:\"" + mockModules.get(0).getBirthDate().toString() +
+                        "\",creationTimestamp:\"" + formattedTimestamp +
+                        "\",age:" + mockModules.get(0).getAge() +
+                        ",type:\"" + mockModules.get(0).getType().toString() +
+                        "\"}",
+                jsonResult, true);
     }
 
     @Test
     public void whenModuleIsNotProvided_thenRetrieveAllModules() throws Exception {
-        int size = repo.findAll().size();
         MvcResult result = mvc.perform(get(BASE_URL).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(size)))
+                .andExpect(jsonPath("$", hasSize(mockModules.size())))
                 .andReturn();
     }
 
     @Test
     public void whenModuleEntityIsPosted_saveItOnDb() throws Exception {
-        Module postedModule = new Module("NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.OWNER);
+        Module postedModule = new Module("NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.CHILD);
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
@@ -102,27 +120,19 @@ public class ModuleControllerIntegrationTest {
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals("{id:11," +
-                        "name:\"NewName\"," +
-                        "surname:\"NewSurname\"," +
-                        "birthDate:\"1977-05-22\"," +
-//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-                        "age:42," +
-                        "type:\"OWNER\"}",
+        JSONAssert.assertEquals("{name:\"" + postedModule.getName() +
+                        "\",surname:\"" + postedModule.getSurname() +
+                        "\",birthDate:\"" + postedModule.getBirthDate().toString() +
+                        "\",type:\"" + postedModule.getType().toString() +
+                        "\"}",
                 jsonResult, false);
+
+        mockModules.add(postedModule);
     }
 
     @Test
     public void whenModuleEntityIsPutted_updateItOnDb() throws Exception {
-        Module module = repo.findById(1L).orElseThrow(() -> new ModuleNotFoundException());
-
-        Module updatedModule = new Module(module.getId(),
-                "NewName",
-                "NewSurname",
-                LocalDate.of(1900, 01, 01),
-                module.getCreationTimestamp(),
-                119,
-                module.getType());
+        Module updatedModule = new Module(1L, "NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.CHILD);
 
         ObjectMapper om = new ObjectMapper();
         om.registerModule(new JavaTimeModule());
@@ -134,14 +144,37 @@ public class ModuleControllerIntegrationTest {
                 .andReturn();
 
         String jsonResult = result.getResponse().getContentAsString();
-        JSONAssert.assertEquals("{id:1," +
-                        "name:\"NewName\"," +
-                        "surname:\"NewSurname\"," +
-                        "birthDate:\"1900-01-01\"," +
-//                        "creationTimestamp:\"2015-01-01T11:00:00.000+0000\"," +
-                        "age:119," +
-                        "type:\"OWNER\"}",
+        JSONAssert.assertEquals("{id:" + updatedModule.getId().intValue() +
+                        ",name:\"" + updatedModule.getName() +
+                        "\",surname:\"" + updatedModule.getSurname() +
+                        "\",birthDate:\"" + updatedModule.getBirthDate().toString() +
+                        "\",age:" + updatedModule.getAge() +
+                        ",type:\"" + updatedModule.getType().toString() +
+                        "\"}",
                 jsonResult, false);
+    }
+
+    @Test
+    public void canDeleteEntityFromDb() throws Exception {
+        MvcResult result = mvc.perform(delete(BASE_URL + "/{id}", mockModules.get(0).getId()))
+                .andExpect(status().isAccepted())
+                .andReturn();
+        mockModules.remove(mockModules.get(0));
+    }
+
+    private static List<Module> getMockModules() {
+        return new ArrayList<>(Arrays.asList(
+                new Module(1L, "Jason", "Smith", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2015-01-01 12:00:00.000"), 19, Type.OWNER),
+                new Module(2L, "Alice", "Anderson", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2019-02-02 01:01:01.001"), 19, Type.CHILD),
+                new Module(3L, "Bob", "Anderson", LocalDate.of(1980, 2, 2), Timestamp.valueOf("2018-03-03 02:02:01.002"), 39, Type.SPOUSE),
+                new Module(4L, "Bob", "Carlsen", LocalDate.of(1980, 3, 3), Timestamp.valueOf("2017-04-04 03:03:03.003"), 39, Type.SPOUSE),
+                new Module(5L, "Dean", "Dobro", LocalDate.of(2000, 4, 4), Timestamp.valueOf("2018-05-05 04:03:04.004"), 19, Type.CHILD),
+                new Module(6L, "Ester", "Effenbach", LocalDate.of(2010, 4, 5), Timestamp.valueOf("2017-06-06 15:05:05.005"), 9, Type.OWNER),
+                new Module(7L, "Filip", "Fjord", LocalDate.of(1950, 6, 6), Timestamp.valueOf("2016-07-07 15:06:06.006"), 69, Type.SPOUSE),
+                new Module(8L, "Greta", "Gunderson", LocalDate.of(1960, 7, 6), Timestamp.valueOf("2014-08-08 17:07:07.007"), 59, Type.CHILD),
+                new Module(9L, "Hans", "Haskell", LocalDate.of(1975, 8, 8), Timestamp.valueOf("2013-09-09 12:00:00.000"), 44, Type.OWNER),
+                new Module(10L, "Bob", "Anderson", LocalDate.of(1985, 9, 9), Timestamp.valueOf(" 2016-08-08 00:00:00.000"), 34, Type.SPOUSE)
+        ));
     }
 }
 
