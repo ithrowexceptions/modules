@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ModuleControllerUnitTests {
     private static final String BASE_URL = "/modules";
 
-    private static List<Module> mockModules = getMockModules();
+    private static final List<Module> mockModules = getMockModules();
 
     @Autowired
     private MockMvc mvc;
@@ -72,7 +72,7 @@ public class ModuleControllerUnitTests {
 
     @Test
     // fetching id 1 must return Jason's module
-    public void whenModuledIsProvided_thenRetrievedTheCorrectModule() throws Exception {
+    public void whenModuleIsProvided_thenRetrievedTheCorrectModule() throws Exception {
         LocalDateTime timestamp = mockModules.get(0).getCreationTimestamp().toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         String formattedTimestamp = timestamp

@@ -9,7 +9,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public class ModuleSpecification implements Specification<Module> {
-    private Module module;
+    private final Module module;
 
     public ModuleSpecification(Module module) {
         this.module = module;

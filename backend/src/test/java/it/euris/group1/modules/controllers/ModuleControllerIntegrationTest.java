@@ -75,7 +75,7 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenModuledIdNotFound_thenReturn404() throws Exception {
+    public void whenModuleIdNotFound_thenReturn404() throws Exception {
         mvc.perform(get(BASE_URL + "/{id}", 1000)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -181,7 +181,7 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenModuledNameProvided_thenRetrievedTheCorrectModules() throws Exception {
+    public void whenModuleNameProvided_thenRetrievedTheCorrectModules() throws Exception {
         mvc.perform(get(BASE_URL + "/name/{name}", "Bob")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -192,14 +192,14 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenModuledNameNotFound_thenReturn404() throws Exception {
+    public void whenModuleNameNotFound_thenReturn404() throws Exception {
         mvc.perform(get(BASE_URL + "/name/{name}", "Foo")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenModuledSurnameProvided_thenRetrievedTheCorrectModules() throws Exception {
+    public void whenModuleSurnameProvided_thenRetrievedTheCorrectModules() throws Exception {
         mvc.perform(get(BASE_URL + "/surname/{surname}", "Smith")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -208,14 +208,14 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenModuledSurnameNotFound_thenReturn404() throws Exception {
+    public void whenModuleSurnameNotFound_thenReturn404() throws Exception {
         mvc.perform(get(BASE_URL + "/surname/{surname}", "Foo")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenModuledBirthdateProvided_thenRetrievedTheCorrectModules() throws Exception {
+    public void whenModuleBirthdateProvided_thenRetrievedTheCorrectModules() throws Exception {
         mvc.perform(get(BASE_URL + "/birthdate/{birthdate}", "2000-01-01")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -225,14 +225,14 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenModuledBirthdateNotFound_thenReturn404() throws Exception {
+    public void whenModuleBirthdateNotFound_thenReturn404() throws Exception {
         mvc.perform(get(BASE_URL + "/creationTimestamp/{creationTimestamp}", "1800-01-01")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenModuledAgeProvided_thenRetrievedTheCorrectModules() throws Exception {
+    public void whenModuleAgeProvided_thenRetrievedTheCorrectModules() throws Exception {
         mvc.perform(get(BASE_URL + "/age/{age}", 19)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -243,14 +243,14 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenModuledAgeNotFound_thenReturn404() throws Exception {
+    public void whenModuleAgeNotFound_thenReturn404() throws Exception {
         mvc.perform(get(BASE_URL + "/age/{age}", 1000)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenModuledTypeProvided_thenRetrievedTheCorrectModules() throws Exception {
+    public void whenModuleTypeProvided_thenRetrievedTheCorrectModules() throws Exception {
         mvc.perform(get(BASE_URL + "/type/{type}", "OWNER")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -261,7 +261,7 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void whenWrongModuledTypeProvided_thenReturn400() throws Exception {
+    public void whenWrongModuleTypeProvided_thenReturn400() throws Exception {
         mvc.perform(get(BASE_URL + "/type/{type}", "Foo")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
@@ -294,7 +294,7 @@ public class ModuleControllerIntegrationTest {
     }
 
     @Test
-    public void canSearhAModuleFilteringByProperties() throws Exception {
+    public void canSearchAModuleFilteringByProperties() throws Exception {
         mvc.perform(get(BASE_URL + "/search?surname=Anderson&age=19").accept(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content", hasSize(1)))
                 .andExpect(status().isOk())

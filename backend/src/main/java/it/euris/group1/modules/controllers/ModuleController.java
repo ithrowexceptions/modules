@@ -99,7 +99,7 @@ public class ModuleController {
     public ResponseEntity<List<Module>> getModulesByBirthdate(
             @ApiParam(value = "Module birthdate, formatted as yyyy-mm-dd", required = true)
             @PathVariable("birthdate") String moduleBirthdate) {
-        LocalDate birthdate = null;
+        LocalDate birthdate;
         try {
             birthdate = LocalDate.parse(moduleBirthdate);
         } catch (DateTimeParseException e) {
@@ -121,7 +121,7 @@ public class ModuleController {
     public ResponseEntity<List<Module>> getModulesByTimestamp(
             @ApiParam(value = "Module creation timestamp, formatted as yyyy-mm-ddThh:mm:ss.fff", required = true)
             @PathVariable("creationTimestamp") String moduleCreationTimestamp) {
-        Timestamp timestamp = null;
+        Timestamp timestamp;
         try {
             timestamp = Timestamp.valueOf(moduleCreationTimestamp.replace('T', ' '));
         } catch (Exception e) {
@@ -194,7 +194,7 @@ public class ModuleController {
                                                       @RequestParam(name = "timestamp", required = false) String moduleCreationTimestamp,
                                                       @RequestParam(name = "age", required = false) Integer moduleAge,
                                                       @RequestParam(name = "type", required = false) String moduleType,
-                                                      Pageable page) throws ModuleNotFoundException {
+                                                      Pageable page) {
         Module module = new Module();
         if (moduleName != null)
             module.setName(moduleName);
@@ -214,7 +214,7 @@ public class ModuleController {
             module.setAge(moduleAge);
         }
         if (moduleType != null) {
-            Type type = null;
+            Type type;
             switch (moduleType.toUpperCase()) {
                 case "OWNER":
                     type = Type.OWNER;
@@ -242,7 +242,7 @@ public class ModuleController {
     })
     public ResponseEntity<byte[]> getReport(@PathVariable("id") Long moduleId) throws JRException {
         Optional<Module> optModule = modulesRepository.findById(moduleId);
-        if (!optModule.isPresent())
+        if (optModule.isEmpty())
             return ResponseEntity.notFound().build();
 
         Module module = optModule.get();
@@ -301,7 +301,7 @@ public class ModuleController {
             @Valid @RequestBody Module module) {
         Long id = module.getId();
         Optional<Module> optModule = modulesRepository.findById(id);
-        if (!optModule.isPresent())
+        if (optModule.isEmpty())
             return ResponseEntity.notFound().build();
 
         Module moduleToUpdate = optModule.get();
@@ -329,7 +329,7 @@ public class ModuleController {
             @ApiParam(value = "Module ID", required = true)
             @PathVariable("id") Long id) {
         Optional<Module> optModule = modulesRepository.findById(id);
-        if (!optModule.isPresent())
+        if (optModule.isEmpty())
             return ResponseEntity.notFound().build();
 
         modulesRepository.delete(optModule.get());
