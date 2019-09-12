@@ -39,7 +39,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ModulesApplication.class)
 @AutoConfigureMockMvc
@@ -56,8 +55,6 @@ public class ModuleControllerUnitTests {
 
     @Before
     public void setUp() {
-//        mockModules = getMockModules();
-
         Module jasonModule = mockModules.get(0);
         var jasonOptionalModule = Optional.of(mockModules.get(0));
         Module savedModule = new Module(1L, "NewName", "NewSurname", LocalDate.of(1977, 5, 22), Type.CHILD);
@@ -74,7 +71,8 @@ public class ModuleControllerUnitTests {
     }
 
     @Test
-    public void whenModuledIsProvided_thenRetrievedNameIsCorrect() throws Exception {
+    // fetching id 1 must return Jason's module
+    public void whenModuledIsProvided_thenRetrievedTheCorrectModule() throws Exception {
         LocalDateTime timestamp = mockModules.get(0).getCreationTimestamp().toLocalDateTime();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         String formattedTimestamp = timestamp
