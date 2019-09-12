@@ -22,15 +22,13 @@ export class AddModuleComponent implements OnInit {
     private ngZone: NgZone,
     private router: Router,
     public moduleService: ModuleService
-  ){ }
+  ){}
 
   addModule() {
     this.moduleForm = this.fb.group({
       name: [''],
       surname: [''],
-      birthdate: [''],
-      creationtimestamp: [''],
-      age: [''],
+      birthDate: [''],
       type: ['']
     })
   }
@@ -38,7 +36,7 @@ export class AddModuleComponent implements OnInit {
   submitForm() {
     this.moduleService.CreateModule(this.moduleForm.value).subscribe(res => {
       console.log('Module added!')
-      this.ngZone.run(() => this.router.navigateByUrl('/modules-list'))
+      this.ngZone.run(() => this.router.navigateByUrl('/modules'))
     });
   }
 

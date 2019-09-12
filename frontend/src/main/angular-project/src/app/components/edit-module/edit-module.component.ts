@@ -25,9 +25,9 @@ export class EditModuleComponent implements OnInit {
     private router: Router
   ) {
     var id = this.actRoute.snapshot.paramMap.get('id');
-    console.log(id);
     this.moduleService.GetModuleById(id).subscribe((data) => {
       this.updateModuleForm = this.fb.group({
+        id: [data.id],
         name: [data.name],
         surname: [data.surname],
         birthDate: [data.birthDate],
@@ -40,10 +40,11 @@ export class EditModuleComponent implements OnInit {
 
   updateForm(){
     this.updateModuleForm = this.fb.group({
+      id: [''],
       name: [''],
       surname: [''],
-      birthdate: [''],
-      creationtimestamp: [''],
+      birthDate: [''],
+      creationTimestamp: [''],
       age: [''],
       type: ['']
     })
@@ -52,7 +53,7 @@ export class EditModuleComponent implements OnInit {
   submitForm(){
     var id = this.actRoute.snapshot.paramMap.get('id');
     this.moduleService.UpdateModule(id, this.updateModuleForm.value).subscribe(res => {
-      this.ngZone.run(() => this.router.navigateByUrl('/modules-list'))
+      this.ngZone.run(() => this.router.navigateByUrl('/modules'))
     })
   }
 

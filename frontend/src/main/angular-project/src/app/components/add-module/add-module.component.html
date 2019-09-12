@@ -1,7 +1,5 @@
 <div class="container wrapper wrapper2">
     <div class="row">
-
-        <!-- Form -->
         <div class="col-md-12">
             <h3>Add Module</h3>
             <form [formGroup]="moduleForm" (ngSubmit)="submitForm()" novalidate>
@@ -15,15 +13,7 @@
                 </div>
               <div class="form-group">
                 <label>Module Birthdate</label>
-                <input type="text" formControlName="birthdate" class="form-control" maxlength="30">
-              </div>
-              <div class="form-group">
-                <label>Module Creation TimeStamp</label>
-                <input type="text" formControlName="creationtimestamp" class="form-control" maxlength="30">
-              </div>
-              <div class="form-group">
-                <label>Module Age</label>
-                <input type="text" formControlName="age" class="form-control" maxlength="30">
+                <input type="text" formControlName="birthDate" class="form-control" maxlength="30">
               </div>
               <div class="form-group">
                 <label>Module Type</label>
@@ -32,6 +22,5 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
-
     </div>
 </div>
