@@ -231,22 +231,6 @@ public class ModuleControllerIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    public void whenModuledTimestampProvided_thenRetrievedTheCorrectModules() throws Exception {
-//        mvc.perform(get(BASE_URL + "/creationTimestamp/2015-01-01T12:00:00.000")
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$", hasSize(1)))
-//                .andExpect(jsonPath("$[0].creationTimestamp", is("2015-01-01T12:00:00.000+0200")));
-//    }
-//
-//    @Test
-//    public void whenWrongModuledTimestampProvided_thenReturn404() throws Exception {
-//        mvc.perform(get(BASE_URL + "/creationTimestamp/{creationTimestamp}", "1800-01-01T12:00:00.000+0200\"")
-//                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isNotFound());
-//    }
-
     @Test
     public void whenModuledAgeProvided_thenRetrievedTheCorrectModules() throws Exception {
         mvc.perform(get(BASE_URL + "/age/{age}", 19)
@@ -303,11 +287,11 @@ public class ModuleControllerIntegrationTest {
                 .andExpect(jsonPath("$.pageable.pageSize", is(2)));
     }
 
-//    @Test
-//    public void canGetReportOfModuleWithID1() throws Exception {
-//        mvc.perform(get(BASE_URL + "/report/1").accept(MediaType.APPLICATION_PDF))
-//                .andExpect(status().isOk());
-//    }
+    @Test
+    public void canGetReportOfModuleWithID1() throws Exception {
+        mvc.perform(get(BASE_URL + "/report/1").accept(MediaType.APPLICATION_PDF))
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void canSearhAModuleFilteringByProperties() throws Exception {
@@ -323,4 +307,3 @@ public class ModuleControllerIntegrationTest {
                 .andExpect(jsonPath("$.content[0].type", is("CHILD")));
     }
 }
-
