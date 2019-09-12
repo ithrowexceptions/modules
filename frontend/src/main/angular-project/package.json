@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~9.0.0-next.4",
     "@angular/router": "~9.0.0-next.4",
     "bootstrap": "^4.3.1",
+    "ngx-pagination": "^4.1.0",
     "rxjs": "~6.5.3",
     "tslib": "^1.9.0",
     "zone.js": "~0.10.2"

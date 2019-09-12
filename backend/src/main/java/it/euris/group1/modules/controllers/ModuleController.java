@@ -39,6 +39,7 @@ public class ModuleController {
         return ResponseEntity.ok().body(modules);
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Module> getModuleById(@PathVariable("id") Long moduleId) {
         Optional<Module> optModule = modulesRepository.findById(moduleId);
