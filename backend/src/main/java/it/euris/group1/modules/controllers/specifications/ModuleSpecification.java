@@ -41,6 +41,10 @@ public class ModuleSpecification implements Specification<Module> {
             predicate.getExpressions().add(criteriaBuilder.equal(root.get("type"), module.getType()));
         }
 
+        if(module.getCreationTimestamp() != null) {
+            predicate.getExpressions().add(criteriaBuilder.equal(root.get("creationTimestamp"), module.getCreationTimestamp()));
+        }
+
         return predicate;
     }
 }

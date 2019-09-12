@@ -191,7 +191,7 @@ public class ModuleController {
     public ResponseEntity<Page<Module>> searchModules(@RequestParam(name = "name", required = false) String moduleName,
                                                       @RequestParam(name = "surname", required = false) String moduleSurname,
                                                       @RequestParam(name = "birthdate", required = false) String moduleBirthdate,
-//                                      @RequestParam(name = "timestamp", required = false) String moduleCreationTimestamp,
+                                                      @RequestParam(name = "timestamp", required = false) String moduleCreationTimestamp,
                                                       @RequestParam(name = "age", required = false) Integer moduleAge,
                                                       @RequestParam(name = "type", required = false) String moduleType,
                                                       Pageable page) throws ModuleNotFoundException {
@@ -206,10 +206,10 @@ public class ModuleController {
             LocalDate birthdate = LocalDate.parse(moduleBirthdate);
             module.setBirthDate(birthdate);
         }
-//        if (moduleCreationTimestamp != null) {
-//            Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp.replace('T', ' '));
-//            module.setCreationTimestamp(timestamp);
-//        }
+        if (moduleCreationTimestamp != null) {
+            Timestamp timestamp = Timestamp.valueOf(moduleCreationTimestamp.replace('T', ' '));
+            module.setCreationTimestamp(timestamp);
+        }
         if (moduleAge != null) {
             module.setAge(moduleAge);
         }
