@@ -12,8 +12,7 @@
                 leftMargin CDATA #REQUIRED
                 rightMargin CDATA #REQUIRED
                 topMargin CDATA #REQUIRED
-                bottomMargin CDATA #REQUIRED
-                uuid CDATA #REQUIRED>
+                bottomMargin CDATA #REQUIRED>
         <!ELEMENT queryString (#PCDATA)>
         <!ELEMENT field (#PCDATA)>
         <!ATTLIST field
@@ -29,7 +28,6 @@
         <!ELEMENT reportElement (#PCDATA)>
         <!ATTLIST reportElement
                 height CDATA #REQUIRED
-                uuid CDATA #REQUIRED
                 width CDATA #REQUIRED
                 x CDATA #REQUIRED
                 y CDATA #REQUIRED>
@@ -47,7 +45,11 @@
         <!ELEMENT pageFooter (band)*>
         <!ELEMENT summary (band)*>
         ]>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="84feeac3-d1f7-4503-84bf-fc3fa153df55">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="report1"
+              pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" >
     <queryString>
         <![CDATA[]]>
     </queryString>
@@ -67,7 +69,7 @@
     <title>
         <band height="60">
             <textField>
-                <reportElement x="10" y="10" width="400" height="40" uuid="04d35299-5eb0-4a34-b340-3ca5cf8290fc"/>
+                <reportElement x="10" y="10" width="400" height="40" />
                 <textElement>
                     <font size="24" isBold="true"/>
                 </textElement>
@@ -78,30 +80,15 @@
 
     <columnHeader>
         <band height="300" splitType="Stretch">
-<!--            <staticText>-->
-<!--                <reportElement x="0" y="10" width="149" height="40" uuid="bcaf85c0-57ff-4a34-af27-cbf1330125ae"/>-->
-<!--                <textElement>-->
-<!--                    <font fontName="SansSerif" isBold="true" size="12"/>-->
-<!--                </textElement>-->
-<!--                <text><![CDATA[id]]></text>-->
-<!--            </staticText>-->
-<!--            <textField>-->
-<!--                <reportElement x="150" y="10" width="149" height="40" uuid="99fa4c16-cfe2-4482-828e-4439abb9e8f0"/>-->
-<!--                <textElement>-->
-<!--                    <font fontName="SansSerif" isBold="false" size="12"/>-->
-<!--                </textElement>-->
-<!--                <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>-->
-<!--            </textField>-->
-
             <staticText>
-                <reportElement x="0" y="40" width="149" height="40" uuid="faf9b9ee-7cf2-4ea5-80b8-d371c3c753b9"/>
+                <reportElement x="0" y="40" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="true" size="12"/>
                 </textElement>
                 <text><![CDATA[name]]></text>
             </staticText>
             <textField>
-                <reportElement x="150" y="40" width="149" height="40" uuid="ba6e9cfa-6d4c-470b-8bc4-eb2e3411c21e"/>
+                <reportElement x="150" y="40" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="false" size="12"/>
                 </textElement>
@@ -109,14 +96,14 @@
             </textField>
 
             <staticText>
-                <reportElement x="0" y="80" width="149" height="40" uuid="93727672-9f69-4856-aa26-33837e8dc417"/>
+                <reportElement x="0" y="80" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="true" size="12"/>
                 </textElement>
                 <text><![CDATA[surname]]></text>
             </staticText>
             <textField>
-                <reportElement x="150" y="80" width="149" height="40" uuid="447253d3-d268-4873-b0b7-9c174c6a7c9f"/>
+                <reportElement x="150" y="80" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="false" size="12"/>
                 </textElement>
@@ -124,14 +111,14 @@
             </textField>
 
             <staticText>
-                <reportElement x="0" y="120" width="149" height="40" uuid="09b47abe-09b2-479a-bb76-9770e361a23c"/>
+                <reportElement x="0" y="120" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="true" size="12"/>
                 </textElement>
                 <text><![CDATA[birthDate]]></text>
             </staticText>
             <textField>
-                <reportElement x="150" y="120" width="149" height="40" uuid="8992d0ad-1f5e-4210-b50b-1e29dc66f119"/>
+                <reportElement x="150" y="120" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="false" size="12"/>
                 </textElement>
@@ -139,14 +126,14 @@
             </textField>
 
             <staticText>
-                <reportElement x="0" y="160" width="149" height="40" uuid="93727672-9f69-4856-aa26-33837e8dc417"/>
+                <reportElement x="0" y="160" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="true" size="12"/>
                 </textElement>
                 <text><![CDATA[age]]></text>
             </staticText>
             <textField>
-                <reportElement x="150" y="160" width="149" height="40" uuid="8992d0ad-1f5e-4210-b50b-1e29dc66f119"/>
+                <reportElement x="150" y="160" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="false" size="12"/>
                 </textElement>
@@ -154,14 +141,14 @@
             </textField>
 
             <staticText>
-                <reportElement x="0" y="200" width="149" height="40" uuid="93727672-9f69-4856-aa26-33837e8dc417"/>
+                <reportElement x="0" y="200" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="true" size="12"/>
                 </textElement>
                 <text>creation</text>
             </staticText>
             <textField>
-                <reportElement x="150" y="200" width="149" height="40" uuid="8992d0ad-1f5e-4210-b50b-1e29dc66f119"/>
+                <reportElement x="150" y="200" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="false" size="12"/>
                 </textElement>
@@ -169,14 +156,14 @@
             </textField>
 
             <staticText>
-                <reportElement x="0" y="240" width="149" height="40" uuid="93727672-9f69-4856-aa26-33837e8dc417"/>
+                <reportElement x="0" y="240" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="true" size="12"/>
                 </textElement>
                 <text><![CDATA[type]]></text>
             </staticText>
             <textField>
-                <reportElement x="150" y="240" width="149" height="40" uuid="8992d0ad-1f5e-4210-b50b-1e29dc66f119"/>
+                <reportElement x="150" y="240" width="149" height="40" />
                 <textElement>
                     <font fontName="SansSerif" isBold="false" size="12"/>
                 </textElement>

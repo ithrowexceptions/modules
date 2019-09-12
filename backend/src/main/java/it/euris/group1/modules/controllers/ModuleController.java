@@ -1,5 +1,6 @@
 package it.euris.group1.modules.controllers;
 
+import io.swagger.annotations.*;
 import it.euris.group1.modules.controllers.specifications.ModuleSpecification;
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
@@ -28,28 +29,46 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/modules")
+@Api(value="modules", description="Web API pertaining Module entities")
 public class ModuleController {
     @Autowired
     private ModulesRepository modulesRepository;
 
     // ********** GET requests **********
-    @GetMapping()
+    @GetMapping(produces = "application/json")
+    @ApiOperation(value = "View a list of all models", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module list")
+    })
     public ResponseEntity<List<Module>> getModules() {
         List<Module> modules = modulesRepository.findAll();
         return ResponseEntity.ok().body(modules);
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Module> getModuleById(@PathVariable("id") Long moduleId) {
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @ApiOperation(value = "Retrieve a module by ID", response = Module.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 404, message = "Invalid Module ID supplied")
+    })
+    public ResponseEntity<Module> getModuleById(
+            @ApiParam(value = "Module ID", required = true)
+            @PathVariable("id") Long moduleId) {
         Optional<Module> optModule = modulesRepository.findById(moduleId);
         if (optModule.isPresent())
             return ResponseEntity.ok().body(optModule.get());
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/name/{name}")
-    public ResponseEntity<List<Module>> getModulesByName(@PathVariable("name") String moduleName) {
+    @GetMapping(value = "/name/{name}", produces = "application/json")
+    @ApiOperation(value = "Retrieve a module by name", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 404, message = "Module name not present in the database")
+    })
+    public ResponseEntity<List<Module>> getModulesByName(
+            @ApiParam(value = "Module name", required = true)
+            @PathVariable("name") String moduleName) {
         List<Module> modules = modulesRepository.findByName(moduleName);
         if (modules.isEmpty())
             return ResponseEntity.notFound().build();
@@ -205,13 +224,22 @@ public class ModuleController {
         return ResponseEntity
                 .ok()
                 .header("Content-Type", "application/pdf; charset=UTF-8")
-                .header("Content-Disposition", "inline; filename=\"module id:" + moduleId + ".pdf\"")
+                .header("Content-Disposition", "inline; filename=\"module_id_" + moduleId + ".pdf\"")
                 .body(bytes);
     }
 
     // ********** POST requests **********
-    @PostMapping()
-    public ResponseEntity<Module> createModule(@Valid @RequestBody Module newModule) {
+    @PostMapping(produces = "application/json")
+    @ApiOperation(value = "Create a new module on the server", response = Module.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Module successfully created"),
+    })
+    public ResponseEntity<Module> createModule(@Valid @RequestBody Module module) {
+        Module newModule = new Module();
+        newModule.setName(module.getName());
+        newModule.setSurname(module.getSurname());
+        newModule.setBirthDate(module.getBirthDate());
+        newModule.setType(module.getType());
         newModule.setCreationTimestamp();
         newModule.setAge();
         Module savedModule = modulesRepository.save(newModule);
@@ -221,8 +249,15 @@ public class ModuleController {
     }
 
     // ********** PUT requests **********
-    @PutMapping()
-    public ResponseEntity<Module> updateModule(@Valid @RequestBody Module module) throws ModuleNotFoundException {
+    @PutMapping(produces = "application/json")
+    @ApiOperation(value = "Update a module on the server", response = Module.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Module successfully updated"),
+            @ApiResponse(code = 404, message = "Invalid Module ID supplied"),
+    })
+    public ResponseEntity<Module> updateModule(
+            @ApiParam(value = "Module with updated data", required = true)
+            @Valid @RequestBody Module module) {
         Long id = module.getId();
         Optional<Module> optModule = modulesRepository.findById(id);
         if (!optModule.isPresent())
@@ -234,8 +269,6 @@ public class ModuleController {
         moduleToUpdate.setBirthDate(module.getBirthDate());
         moduleToUpdate.setType(module.getType());
         moduleToUpdate.setAge();
-//        moduleToUpdate.setAge(module.getAge());
-//        moduleToUpdate.setCreationTimestamp(module.getCreationTimestamp());
 
         Module updatedModule = modulesRepository.save(moduleToUpdate);
 
@@ -246,14 +279,19 @@ public class ModuleController {
 
     // ********** DELETE requests **********
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteModule(@PathVariable("id") Long id) throws ModuleNotFoundException {
-        Module module = fetchModuleById(id);
+    @ApiOperation(value = "Delete a module on the server")
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "Module deleted"),
+            @ApiResponse(code = 404, message = "Invalid Module ID supplied"),
+    })
+    public ResponseEntity deleteModule(
+            @ApiParam(value = "Module ID", required = true)
+            @PathVariable("id") Long id) {
+        Optional<Module> optModule = modulesRepository.findById(id);
+        if (!optModule.isPresent())
+            return ResponseEntity.notFound().build();
 
-        modulesRepository.delete(module);
+        modulesRepository.delete(optModule.get());
         return ResponseEntity.accepted().build();
-    }
-
-    private Module fetchModuleById(Long id) throws ModuleNotFoundException {
-        return modulesRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException("Module not found for id: " + id));
     }
 }
