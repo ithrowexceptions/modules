@@ -224,7 +224,7 @@ public class ModuleController {
         return ResponseEntity
                 .ok()
                 .header("Content-Type", "application/pdf; charset=UTF-8")
-                .header("Content-Disposition", "inline; filename=\"module id:" + moduleId + ".pdf\"")
+                .header("Content-Disposition", "inline; filename=\"module_id_" + moduleId + ".pdf\"")
                 .body(bytes);
     }
 
@@ -294,8 +294,4 @@ public class ModuleController {
         modulesRepository.delete(optModule.get());
         return ResponseEntity.accepted().build();
     }
-
-//    private Module fetchModuleById(Long id) throws ModuleNotFoundException {
-//        return modulesRepository.findById(id).orElseThrow(() -> new ModuleNotFoundException("Module not found for id: " + id));
-//    }
 }
