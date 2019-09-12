@@ -3,8 +3,8 @@
 
 ### Team
 
-* DEV 1: Alessandro Gondolo, dedicato alla configurazione del db H2 e alla gestione della persistenza dei dati
-* DEV 2: Andrea Schiavi, dedicato all'implementazione del web RESTful API e alla supervisione del repository Git.
+* DEV 1: Alessandro Gondolo, dedicato alla configurazione del db H2 e alla gestione della persistenza dei dati sulbackend
+* DEV 2: Andrea Schiavi, dedicato all'implementazione del controller sul backend e alla supervisione del repository Git
 * DEV 3: Andrea Bentley, dedicato al'implementazione del frontend
 
 ### Set up del progetto
@@ -28,13 +28,17 @@
 
 #### DEV 2
 
-1. Implementazione di un REST controller per la gestione delle operazioni CRUD
-2. Unit test sul controller con repository di mock
-3. Integration test su controller + repository con db H2 in memory
+1. Implementazione di un REST controller per la gestione delle richieste CRUD
+2. Unit test delle rechieste CRUD con repository di mock
+3. Integration test delle richieste CRUD con repository di produzione con db H2 in memory
 4. Test euristico dell'applicazione con db H2 persistito, lanciando richieste HTTP da Postman
 5. Estensione della web API con una chiamata che gestisca la paginazione
 6. Implementazione di un report Jasper in formato jrxml
 7. Estensione della web API con una chiamata che gestisca la produzione di un report di un'entità in formato pdf
 8. Integrazione del frontend nel backend
+9. Configurazione delle policies CORS
+10. Estensione della web API con una chiamata di filtraggio dei dati
+11. Implementazione di nuovi test di integrazione per testare le nuove funzionalità della web API
+12. Configurazione di Swagger per la documentazione della web API
 
 #### DEV 3
