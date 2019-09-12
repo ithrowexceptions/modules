@@ -1,8 +1,6 @@
 package it.euris.group1.modules.repositories;
 
 import it.euris.group1.modules.entities.Module;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;

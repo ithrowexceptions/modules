@@ -19,7 +19,7 @@ public class ModuleSpecification implements Specification<Module> {
     public Predicate toPredicate(Root<Module> root,
                                  CriteriaQuery<?> criteriaQuery,
                                  CriteriaBuilder criteriaBuilder) {
-        Predicate predicate = criteriaBuilder.conjunction(); // creates a predicate disjunction (OR)
+        Predicate predicate = criteriaBuilder.conjunction();
 
         if(module.getName() != null) {
             predicate.getExpressions().add(criteriaBuilder.equal(root.get("name"), module.getName()));
