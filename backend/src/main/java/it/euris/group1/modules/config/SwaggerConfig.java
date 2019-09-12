@@ -28,9 +28,6 @@ public class SwaggerConfig {
     private ApiInfo apiEndPointsInfo() {
         return new ApiInfoBuilder().title("Group 1 - Spring Boot Modules Project: REST API")
                 .description("Modules REST API")
-                .contact(new Contact("Andrea Schiavi", "www.euris.it", "andrea.schiavi77@gmail.com"))
-                .license("Apache 2.0")
-                .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
                 .version("1.0.0")
                 .build();
     }

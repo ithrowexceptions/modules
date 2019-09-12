@@ -29,7 +29,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/modules")
-@Api(value="modules", description="Web API pertaining Module entities")
+@Api(value="modules")
 public class ModuleController {
     @Autowired
     private ModulesRepository modulesRepository;
@@ -76,7 +76,14 @@ public class ModuleController {
     }
 
     @GetMapping("/surname/{surname}")
-    public ResponseEntity<List<Module>> getModulesBySurname(@PathVariable("surname") String moduleSurname) {
+    @ApiOperation(value = "Retrieve a module by surname", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 404, message = "Module surname not present in the database")
+    })
+    public ResponseEntity<List<Module>> getModulesBySurname(
+            @ApiParam(value = "Module surname", required = true)
+            @PathVariable("surname") String moduleSurname) {
         List<Module> modules = modulesRepository.findBySurname(moduleSurname);
         if (modules.isEmpty())
             return ResponseEntity.notFound().build();
@@ -84,7 +91,14 @@ public class ModuleController {
     }
 
     @GetMapping("/birthdate/{birthdate}")
-    public ResponseEntity<List<Module>> getModulesByBirthdate(@PathVariable("birthdate") String moduleBirthdate) {
+    @ApiOperation(value = "Retrieve a module by birthdate", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 404, message = "Module birthdate not present in the database")
+    })
+    public ResponseEntity<List<Module>> getModulesByBirthdate(
+            @ApiParam(value = "Module birthdate, formatted as yyyy-mm-dd", required = true)
+            @PathVariable("birthdate") String moduleBirthdate) {
         LocalDate birthdate = null;
         try {
             birthdate = LocalDate.parse(moduleBirthdate);
@@ -99,7 +113,14 @@ public class ModuleController {
     }
 
     @GetMapping("/timestamp/{creationTimestamp}")
-    public ResponseEntity<List<Module>> getModulesByTimestamp(@PathVariable("creationTimestamp") String moduleCreationTimestamp) {
+    @ApiOperation(value = "Retrieve a module by creation timestamp", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 404, message = "Module creation timestamp not present in the database")
+    })
+    public ResponseEntity<List<Module>> getModulesByTimestamp(
+            @ApiParam(value = "Module creation timestamp, formatted as yyyy-mm-ddThh:mm:ss.fff", required = true)
+            @PathVariable("creationTimestamp") String moduleCreationTimestamp) {
         Timestamp timestamp = null;
         try {
             timestamp = Timestamp.valueOf(moduleCreationTimestamp.replace('T', ' '));
@@ -115,7 +136,14 @@ public class ModuleController {
     }
 
     @GetMapping("/age/{age}")
-    public ResponseEntity<List<Module>> getModulesByAge(@PathVariable("age") Integer moduleAge) {
+    @ApiOperation(value = "Retrieve a module by age", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 404, message = "Module age not present in the database")
+    })
+    public ResponseEntity<List<Module>> getModulesByAge(
+            @ApiParam(value = "Module age, as integer number", required = true)
+            @PathVariable("age") Integer moduleAge) {
         List<Module> modules = modulesRepository.findByAge(moduleAge);
         if (modules.isEmpty())
             return ResponseEntity.notFound().build();
@@ -124,6 +152,12 @@ public class ModuleController {
     }
 
     @GetMapping("/type/{type}")
+    @ApiOperation(value = "Retrieve a module by type", response = Module.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved module"),
+            @ApiResponse(code = 400, message = "Bad submitted type"),
+            @ApiResponse(code = 404, message = "Module type not present in the database")
+    })
     public ResponseEntity<List<Module>> getModulesByType(@PathVariable("type") String moduleType) {
         Type type;
         switch (moduleType.toUpperCase()) {
@@ -199,6 +233,11 @@ public class ModuleController {
     }
 
     @GetMapping("/report/{id}")
+    @ApiOperation(value = "Retrieve a module pdf report by module id", response = byte[].class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully generated report"),
+            @ApiResponse(code = 404, message = "Module id not present in the database")
+    })
     public ResponseEntity<byte[]> getReport(@PathVariable("id") Long moduleId) throws JRException {
         Optional<Module> optModule = modulesRepository.findById(moduleId);
         if (!optModule.isPresent())
