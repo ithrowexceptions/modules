@@ -234,7 +234,12 @@ public class ModuleController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Module successfully created"),
     })
-    public ResponseEntity<Module> createModule(@Valid @RequestBody Module newModule) {
+    public ResponseEntity<Module> createModule(@Valid @RequestBody Module module) {
+        Module newModule = new Module();
+        newModule.setName(module.getName());
+        newModule.setSurname(module.getSurname());
+        newModule.setBirthDate(module.getBirthDate());
+        newModule.setType(module.getType());
         newModule.setCreationTimestamp();
         newModule.setAge();
         Module savedModule = modulesRepository.save(newModule);
