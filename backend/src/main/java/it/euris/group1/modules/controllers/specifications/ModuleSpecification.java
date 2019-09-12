@@ -29,8 +29,16 @@ public class ModuleSpecification implements Specification<Module> {
             predicate.getExpressions().add(criteriaBuilder.equal(root.get("surname"), module.getSurname()));
         }
 
+        if(module.getBirthDate() != null) {
+            predicate.getExpressions().add(criteriaBuilder.equal(root.get("birthDate"), module.getBirthDate()));
+        }
+
         if(module.getAge() != null) {
             predicate.getExpressions().add(criteriaBuilder.equal(root.get("age"), module.getAge()));
+        }
+
+        if(module.getType() != null) {
+            predicate.getExpressions().add(criteriaBuilder.equal(root.get("type"), module.getType()));
         }
 
         return predicate;
