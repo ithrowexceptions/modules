@@ -55,6 +55,7 @@ export class ModulePageComponent implements OnInit {
          });
    }
 
+
    nextPage(){
     return this.moduleService.GetPage(this.config.currentPage+1,this.config.itemsPerPage).subscribe((data: any) => {
           this.config.itemsPerPage = data.numberOfElements;
@@ -74,15 +75,11 @@ export class ModulePageComponent implements OnInit {
      })
    }
 
-   // search module, unfinished
-   searchModules(data){
-       return this.moduleService.SearchModules(null, null, null, null, null, null).subscribe(res => {
-        this.ModulesList = data;
+   // Get Module Report
+   downloadPDF(id){
+       return this.moduleService.GetReportOfModulesById(id).subscribe( (data : any) => {
+         var url= window.URL.createObjectURL(data);
+         window.open(url);
      })
-   }
-
-   // Get Module Report, unfinished
-   getModuleReport(id){
-     return this.moduleService.GetReportOfModulesById(id);
    }
 }

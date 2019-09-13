@@ -15,21 +15,23 @@ import { ModuleService } from './services/module.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
 /* Components */
-import { AddModuleComponent } from './components/add-module/add-module.component';
-import { EditModuleComponent } from './components/edit-module/edit-module.component';
+import { ModuleAddComponent } from './components/module-add/module-add.component';
+import { ModuleEditComponent } from './components/module-edit/module-edit.component';
 import { ModuleListComponent } from './components/module-list/module-list.component';
 import { IndexComponent } from './components/index/index.component';
 import { ModulePageComponent } from './components/module-page/module-page.component';
+import { ModuleSearchComponent } from './components/module-search/module-search.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AddModuleComponent,
-    EditModuleComponent,
+    ModuleAddComponent,
+    ModuleEditComponent,
     ModuleListComponent,
     IndexComponent,
-    ModulePageComponent
+    ModulePageComponent,
+    ModuleSearchComponent
   ],
   imports: [
     BrowserModule,
