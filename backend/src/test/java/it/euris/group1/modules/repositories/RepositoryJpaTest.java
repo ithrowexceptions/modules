@@ -31,13 +31,13 @@ public class RepositoryJpaTest {
 
     @Test
     public void should_find_module_by_Name() {
-        List<Module> prova  = repository.findByName("Jason");
+        List<Module> prova = repository.findByName("Jason");
         assertThat(prova.size()).isEqualTo(1);
     }
 
     @Test
     public void should_find_module_by_Id() {
-        Module dean = new Module(5L,"Dean", "Dobro", LocalDate.of(2000, 4, 4), Timestamp.valueOf("2018-05-05 04:03:04.004"), 19, Type.CHILD);
+        Module dean = new Module(5L, "Dean", "Dobro", LocalDate.of(2000, 4, 4), Timestamp.valueOf("2018-05-05 04:03:04.004"), 19, Type.CHILD);
         Module foundModule = repository.findById(5L).get();
         assertThat(foundModule.getId()).isEqualTo(dean.getId());
     }
@@ -50,7 +50,7 @@ public class RepositoryJpaTest {
 
     @Test
     public void should_find_module_by_birth_date() {
-        List<Module> filip = repository.findByBirthDate(LocalDate.of(1950,06,06));
+        List<Module> filip = repository.findByBirthDate(LocalDate.of(1950, 6, 6));
         assertThat(filip.get(0).getBirthDate()).isEqualTo(repository.findByName("Filip").get(0).getBirthDate());
     }
 
