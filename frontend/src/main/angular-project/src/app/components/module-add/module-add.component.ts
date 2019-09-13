@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-add-module',
-  templateUrl: './add-module.component.html',
-  styleUrls: ['./add-module.component.css']
+  selector: 'app-module-add',
+  templateUrl: './module-add.component.html',
+  styleUrls: ['./module-add.component.css']
 })
 
-export class AddModuleComponent implements OnInit {
+export class ModuleAddComponent implements OnInit {
   moduleForm: FormGroup;
   ModuleArr: any = [];
 

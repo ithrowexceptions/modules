@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModuleService } from '../../services/module.service';
 import { ActivatedRoute } from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-module-list',
@@ -18,6 +19,7 @@ export class ModuleListComponent implements OnInit {
   constructor(
     public moduleService: ModuleService,
     private route: ActivatedRoute,
+    private router: Router
   ){}
 
    // Get modules
@@ -87,17 +89,12 @@ export class ModuleListComponent implements OnInit {
      })
    }
 
-   // Delete module
-   searchModules(data){
-       console.log(data);
-       return this.moduleService.SearchModules(null, null, null, null, null, null).subscribe(res => {
-        this.ModulesList = data;
+   // Get Module Report
+   downloadPDF(id){
+       return this.moduleService.GetReportOfModulesById(id).subscribe( (data : any) => {
+         var url= window.URL.createObjectURL(data);
+         window.open(url);
      })
-   }
-
-   // Get Module Report, unfinished
-   getModuleReport(id){
-     return this.moduleService.GetReportOfModulesById(id);
    }
 
 }

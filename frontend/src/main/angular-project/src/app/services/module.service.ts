@@ -96,9 +96,39 @@ export class ModuleService {
     )
   }
 
+  GetPage(page?: number, size?: number): Observable<Page>{
+    if(!page && !size){
+      return this.http.get<Page>(this.baseurl + '/modules/page')
+        .pipe(
+         retry(1),
+         catchError(this.errorHandl)
+       )
+    } else if(!page && size) {
+      return this.http.get<Page>(this.baseurl + '/modules/page?size=' + size)
+        .pipe(
+          retry(1),
+          catchError(this.errorHandl)
+        )
+    } else if(page && !size){
+      return this.http.get<Page>(this.baseurl + '/modules/page?page=' + page)
+        .pipe(
+          retry(1),
+          catchError(this.errorHandl)
+        )
+    } else {
+      return this.http.get<Page>(this.baseurl + '/modules/page?page=' + page +"&size=" + size)
+        .pipe(
+          retry(1),
+          catchError(this.errorHandl)
+        )
+    }
+  }
+
   //GET
-  SearchModules(name, surname, birthdate, timestamp, age, type): Observable<Module> {
-    return this.http.get<Module>(this.baseurl + '/search')
+  GetReportOfModulesById(id): any {
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+    return this.http.get(this.baseurl + '/modules/report/' + id, { headers: headers, responseType: 'blob' })
     .pipe(
       retry(1),
       catchError(this.errorHandl)
@@ -106,12 +136,39 @@ export class ModuleService {
   }
 
   //GET
-  GetReportOfModulesById(id): Observable<Module> {
-    return this.http.get<Module>(this.baseurl + '/modules/report/' + id)
+  SearchModules(data): Observable<Module>{
+    var inputUrl = this.baseurl + "/modules/search?";
+
+    if(data.name){
+      inputUrl = inputUrl + "name="+data.name+"&";
+    }
+
+    if(data.surname){
+      inputUrl = inputUrl + "surname="+data.surname+"&";
+    }
+
+    if(data.birthdate){
+      inputUrl = inputUrl + "birthdate="+data.birthdate+"&";
+    }
+
+    if(data.timestamp){
+      inputUrl = inputUrl + "timestamp="+data.timestamp+"&";
+    }
+
+    if(data.age){
+      inputUrl = inputUrl + "age="+data.age+"&";
+    }
+
+    if(data.type){
+      inputUrl = inputUrl + "type="+data.type;
+    }
+
+    return this.http.get<Module>(inputUrl)
     .pipe(
       retry(1),
       catchError(this.errorHandl)
     )
+
   }
 
   // POST
@@ -130,34 +187,6 @@ export class ModuleService {
       retry(1),
       catchError(this.errorHandl)
     )
-  }
-
-  GetPage(page?: number, size?: number): Observable<Page>{
-  if(!page && !size){
-    return this.http.get<Page>(this.baseurl + '/modules/page')
-      .pipe(
-       retry(1),
-       catchError(this.errorHandl)
-     )
-  } else if(!page && size) {
-    return this.http.get<Page>(this.baseurl + '/modules/page?size=' + size)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
-  } else if(page && !size){
-    return this.http.get<Page>(this.baseurl + '/modules/page?page=' + page)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
-  } else {
-    return this.http.get<Page>(this.baseurl + '/modules/page?page=' + page +"&size=" + size)
-      .pipe(
-        retry(1),
-        catchError(this.errorHandl)
-      )
-    }
   }
 
   // DELETE

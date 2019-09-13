@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-edit-module',
-  templateUrl: './edit-module.component.html',
-  styleUrls: ['./edit-module.component.css']
+  selector: 'app--module-edit',
+  templateUrl: './module-edit.component.html',
+  styleUrls: ['./module-edit.component.css']
 })
 
-export class EditModuleComponent implements OnInit {
+export class ModuleEditComponent implements OnInit {
   ModulesList: any = [];
   updateModuleForm: FormGroup;
 
