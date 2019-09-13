@@ -2,7 +2,6 @@ package it.euris.group1.modules.repositories;
 
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
-import it.euris.group1.modules.repositories.ModulesRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;

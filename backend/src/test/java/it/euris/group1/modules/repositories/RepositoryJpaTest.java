@@ -2,11 +2,9 @@ package it.euris.group1.modules.repositories;
 
 import it.euris.group1.modules.entities.Module;
 import it.euris.group1.modules.entities.Type;
-import it.euris.group1.modules.repositories.ModulesRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -68,15 +66,9 @@ public class RepositoryJpaTest {
         assertThat(types.size()).isEqualTo(4);
     }
 
-
     @Test
     public void should_find_modules_by_creation_Timestamp() {
         Module prova = new Module(1L, "Jason", "Smith", LocalDate.of(2000, 1, 1), Timestamp.valueOf("2015-01-01 12:00:00.000"), 19, Type.OWNER);
         assertThat(prova.getCreationTimestamp()).isEqualTo(repository.findByCreationTimestamp(Timestamp.valueOf("2015-01-01 12:00:00.000")).get(0).getCreationTimestamp());
-
     }
-
-
-
-
 }
