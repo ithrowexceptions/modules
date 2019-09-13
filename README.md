@@ -51,3 +51,13 @@
 12. Configurazione di Swagger per la documentazione della web API
 
 #### DEV 3
+1. Studio di come sviluppare un'applicazione Angular.
+2. Studio di come implementare un server backend finto per eseguire i primi test (il database era pieno di dati
+con formato concordato assieme gli altri Dev del Gruppo)
+3. Ottenuto il Backend dagli altri Dev.
+4. Implementato le operazioni di CRUD più semplici.
+5. Integrato il Front-End con il Back-End per far girare l'applicazione Full Stack sulla porta 8080.
+6. Implementato le operazioni di CRUD più complesse (eccetto i CRUD dedicati alla ricerca ed alla paginazione).
+7. Implementato il bottone per accedere alla documentazione Swagger, implementato il bottone per scaricare i report PDF generati da Jasper nel Backend.
+8. Implementato le componenti di ricerca e paginazione.
+9. Pulizia del codice.
