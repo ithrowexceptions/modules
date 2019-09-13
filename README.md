@@ -26,6 +26,15 @@
 
 #### DEV 1
 
+1. Implementazione dell'entity modules secondo le specifiche ricevute e da quelel definite da noi
+2. Implementazione del repository tramite l'interfaccia DataJpaRepository
+3. Inserimento dei metodi necessari a noi a testare la correttezza dei dati inseriti
+4. Creazione dei dati di mock su cui testeremo il repository
+5. Creazione dei test per il database in memory che andremo a testare
+6. Modifica del repository in memory reso persistente tramite le configuration properties
+7. Inserimento di file di cofigurazione per prendere i dati di mock necessari ai test in memory
+8. Verifica che la tabella con i dati in memory non si vede se viene eseguita l'applicazione 
+
 #### DEV 2
 
 1. Implementazione di un REST controller per la gestione delle richieste CRUD
