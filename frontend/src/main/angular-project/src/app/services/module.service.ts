@@ -138,7 +138,7 @@ export class ModuleService {
   //GET
   SearchModules(data): Observable<Module>{
     var inputUrl = this.baseurl + "/modules/search?";
-    console.log(data)
+
     if(data.name){
       inputUrl = inputUrl + "name="+data.name+"&";
     }
@@ -171,43 +171,6 @@ export class ModuleService {
 
   }
 
-/*
-  //GET
-  SearchModules(name?: String, surname?: String, birthdate?: String, timestamp?: String, age?: number, type?: String): Observable<Module>{
-    var inputUrl = this.baseurl + "/modules/search?";
-
-    if(name){
-      inputUrl = inputUrl + "name="+name+"&";
-    }
-
-    if(surname){
-      inputUrl = inputUrl + "surname="+surname+"&";
-    }
-
-    if(birthdate){
-      inputUrl = inputUrl + "birthdate="+birthdate+"&";
-    }
-
-    if(timestamp){
-      inputUrl = inputUrl + "timestamp="+timestamp+"&";
-    }
-
-    if(age){
-      inputUrl = inputUrl + "age="+age+"&";
-    }
-
-    if(type){
-      inputUrl = inputUrl + "type="+type;
-    }
-
-    return this.http.get<Module>(inputUrl)
-    .pipe(
-      retry(1),
-      catchError(this.errorHandl)
-    )
-
-  }
-*/
   // POST
   CreateModule(data): Observable<Module> {
     return this.http.post<Module>(this.baseurl + '/modules', JSON.stringify(data), this.httpOptions)

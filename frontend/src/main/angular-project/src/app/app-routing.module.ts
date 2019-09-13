@@ -6,12 +6,14 @@ import { ModuleListComponent } from './components/module-list/module-list.compon
 import { IndexComponent } from './components/index/index.component';
 import { ModulePageComponent } from './components/module-page/module-page.component';
 import { ModuleSearchComponent } from './components/module-search/module-search.component';
+import { ModuleSearchResultComponent } from './components/module-search-result/module-search-result.component';
 
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: '', pathMatch: 'full', redirectTo: 'modules' },
   { path: 'modules/page', component: ModulePageComponent },
   { path: 'modules/search', component: ModuleSearchComponent },
+  { path: 'modules/search/result', component: ModuleSearchResultComponent },
   { path: 'module-add', component: ModuleAddComponent },
   { path: 'module-edit/:id', component: ModuleEditComponent },
   { path: 'modules', component: ModuleListComponent },

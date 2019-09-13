@@ -36,9 +36,8 @@ export class ModuleSearchComponent implements OnInit {
   }
 
   searchForm() {
-    this.moduleService.SearchModules(this.moduleForm.value).subscribe(res => {
-      console.log(res)
-      //this.ngZone.run(() => this.router.navigateByUrl('/modules'))
+    return this.moduleService.SearchModules(this.moduleForm.value).subscribe((res : any) => {
+      this.ngZone.run(() => this.router.navigate(['/modules/search/result'], {queryParams: {name: JSON.stringify(res.content)}, skipLocationChange: true} ))
     });
   }
 

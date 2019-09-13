@@ -21,6 +21,7 @@ import { ModuleListComponent } from './components/module-list/module-list.compon
 import { IndexComponent } from './components/index/index.component';
 import { ModulePageComponent } from './components/module-page/module-page.component';
 import { ModuleSearchComponent } from './components/module-search/module-search.component';
+import { ModuleSearchResultComponent } from './components/module-search-result/module-search-result.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { ModuleSearchComponent } from './components/module-search/module-search.
     ModuleListComponent,
     IndexComponent,
     ModulePageComponent,
-    ModuleSearchComponent
+    ModuleSearchComponent,
+    ModuleSearchResultComponent
   ],
   imports: [
     BrowserModule,
