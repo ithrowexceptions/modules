@@ -1,0 +1,32 @@
+<div>
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Module Name</th>
+      <th scope="col">Module Surname</th>
+      <th scope="col">Module Birthdate</th>
+      <th scope="col">Module Creation TimeStamp</th>
+      <th scope="col">Module Age</th>
+      <th scope="col">Module Type</th>
+      <th scope="col">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let modules of ModulesList">
+      <th scope="row">{{modules.id}}</th>
+      <td>{{modules.name}}</td>
+      <td>{{modules.surname}}</td>
+      <td>{{modules.birthDate}}</td>
+      <td>{{modules.creationTimestamp}}</td>
+      <td>{{modules.age}}</td>
+      <td>{{modules.type}}</td>
+      <td>
+        <button type="button" class="btn btn-info btn-sm" (click)="downloadPDF(modules.id)">Report</button>
+        <button type="button" class="btn btn-success btn-sm" [routerLink]="['/module-edit/', modules.id]">Edit</button>
+        <button type="button" class="btn btn-danger btn-sm" (click)="deleteModule(modules)">Remove</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
